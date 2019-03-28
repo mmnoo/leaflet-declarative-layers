@@ -1,0 +1,24 @@
+{
+  "name": "leaflet-dynamic-layers",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./dist/leafletDynamicLayers.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmmelissa/leaflet-dynamic-layers.git"
+  },
+  "author": "Melissa Nunes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmmelissa/leaflet-dynamic-layers/issues"
+  },
+  "homepage": "https://github.com/mmmelissa/leaflet-dynamic-layers#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-typescript": "^5.0.1",
+    "typescript": "^3.3.4000"
+  }
+}
