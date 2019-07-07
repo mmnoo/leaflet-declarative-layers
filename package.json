@@ -21,6 +21,7 @@
     "gulp": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-sourcemaps": "^2.6.5",
+    "gulp-tslint": "^8.1.4",
     "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
     "jasmine": "^3.3.1",
@@ -31,6 +32,7 @@
     "karma-requirejs": "^1.1.0",
     "readable-stream": "^3.2.0",
     "requirejs": "^2.3.6",
-    "typescript": "^3.3.4000"
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.2"
   }
 }

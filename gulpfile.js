@@ -7,6 +7,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const Server = require('karma').Server;
 const del = require('del');
+const tslint = require('gulp-tslint');
 
 
 function compile() {
@@ -57,9 +58,17 @@ function minify(done) {
     }, done).start();
   });
 
+  gulp.task("tslint", () =>
+  tsProject.src()
+        .pipe(tslint({
+            formatter: 'stylish'
+        }))
+        .pipe(tslint.report())
+  );
 
-  gulp.task('test', gulp.series(compile, 'karma'));
+
+  gulp.task('test', gulp.series('tslint', compile, 'karma'));
 
   //todo: one day, figure out way to avoid intermediate files, or at least not hardcode them
-  gulp.task('build', gulp.series('clean', compile, concatenate, minify));
+  gulp.task('build', gulp.series('tslint', 'clean', compile, concatenate, minify));
     
