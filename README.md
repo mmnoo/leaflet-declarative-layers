@@ -1,4 +1,1 @@
-Basic boilerplate for Typescript projects using Gulp to:
-- Test with Karma/Jasmine
-- Bundle/minify 
-- Lint with TSLint.
+Playing around with the idea of creating a library that enables data-driven map layer initialization and interaction. 
