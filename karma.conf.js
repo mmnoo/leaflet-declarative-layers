@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Wed Apr 03 2019 13:21:38 GMT-0700 (PDT)
+// Generated on Tue Jul 09 2019 10:33:03 GMT-0700 (PDT)
 
 module.exports = function(config) {
   config.set({
@@ -10,13 +10,13 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'karma-typescript'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'dist/**/*.js',
-      'test/**/*.js'
+      './src/**/*.ts', 
+      './test/**/*.ts'  
     ],
 
 
@@ -28,13 +28,15 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      './test/**/*.ts': 'karma-typescript',
+      './src/**/*.ts': 'karma-typescript'
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'karma-typescript'],
 
 
     // web server port
@@ -51,12 +53,12 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
 
 
     // Continuous Integration mode

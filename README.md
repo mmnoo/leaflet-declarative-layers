@@ -1,1 +1,4 @@
-Playing around with the idea of creating a library that enables data-driven map layer initialization and interaction. 
+A basic Typescript project using:
+- Karma, Jasmine for testing
+- Webpack for bundling
+- TSLint for linting

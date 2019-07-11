@@ -1,10 +1,14 @@
 {
-  "name": "leaflet-dynamic-layers",
+  "name": "ts-boilerplate",
   "version": "0.0.0",
   "description": "",
-  "main": "./dist/leafletDynamicLayers.js",
+  "private": true,
   "scripts": {
-    "test": "gulp test"
+    "clean": "rm -rf ./dist",
+    "lint": "tslint src/**/*.ts --format stylish",
+    "transpile": "tsc",
+    "bundle": "npm run clean && webpack",
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -17,22 +21,18 @@
   },
   "homepage": "https://github.com/mmmelissa/leaflet-dynamic-layers#readme",
   "devDependencies": {
-    "del": "^4.1.1",
-    "gulp": "^4.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-tslint": "^8.1.4",
-    "gulp-typescript": "^5.0.1",
-    "gulp-uglify": "^3.0.2",
-    "jasmine": "^3.3.1",
-    "jasmine-core": "^3.3.0",
+    "@types/jasmine": "^3.3.13",
+    "jasmine": "^3.4.0",
+    "jasmine-core": "^3.4.0",
     "karma": "3.1.4",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^2.0.0",
     "karma-jasmine": "^2.0.1",
-    "karma-requirejs": "^1.1.0",
-    "readable-stream": "^3.2.0",
-    "requirejs": "^2.3.6",
+    "karma-typescript": "^4.1.1",
+    "ts-loader": "^6.0.4",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
   }
 }
