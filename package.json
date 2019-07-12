@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "lint": "tslint src/**/*.ts --format stylish",
-    "transpile": "tsc",
     "bundle": "npm run clean && webpack",
     "test": "karma start"
   },
