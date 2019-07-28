@@ -1,33 +1,29 @@
-export interface BasicMetadata {
+import { LatLngBounds, TileLayer } from 'leaflet';
+
+export interface IBasicMetadata {
     label: string;
-    selected: boolean;
+    visible: boolean;
     id: string;
     legend?: string; // path to legend image
 }
 
-export interface Coordinate {
-    0: number;
-    1: number;
-}
-
-export interface Bounds {
-    0: Coordinate;
-    1: Coordinate;
-}
-
-export interface RasterMetadata extends BasicMetadata {
+export interface IImageMetadata extends IBasicMetadata {
     file: string;
-    bounds: Bounds;
+    bounds: LatLngBounds;
+    zIndex?: number; // zIndex relative to other raster layers
 }
 
-export interface JsonMetadata  extends BasicMetadata {
+export interface IJsonMetadata  extends IBasicMetadata {
     file: string;
 }
 
-export interface TilesMetadata  extends BasicMetadata {
+export interface ITilesMetadata  extends IBasicMetadata {
     url: string;
+    zIndex?: number; // zIndex relative to other raster layers
 }
 
-export interface MapMetadata {
-    0: [RasterMetadata | JsonMetadata | TilesMetadata];
-}
+export type ILayerMetadata = ITilesMetadata | IJsonMetadata | IImageMetadata;
+
+export interface ILayersMetadata extends Array<ILayerMetadata> {}
+
+export type ILeafletLayers = TileLayer;
