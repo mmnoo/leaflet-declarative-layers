@@ -16,6 +16,12 @@ describe('initialization', () => {
             label: 'testLabel2',
             url: 'www.testUrl2.com',
             visible: true,
+        },
+        {
+            id: 'testId3',
+            label: 'testLabel3',
+            url: 'www.testUrl3.com',
+            visible: false,
         }];
         const MockMap = new Mock<Map>({addLayer: Mock.ANY_FUNC});
         const map = MockMap.Object;

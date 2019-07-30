@@ -1,5 +1,5 @@
-import { ILayersMetadata , ITilesMetadata, ILeafletLayers} from './types';
-import { Map, FeatureGroup } from 'leaflet';
+import { ILayersMetadata, ILayerMetadata, ITilesMetadata, ILeafletLayers} from './types';
+import { Map } from 'leaflet';
 import { TileLayer } from 'leaflet';
 
 export class DynamicLayers {
@@ -12,12 +12,17 @@ export class DynamicLayers {
             if (layerMetadata.hasOwnProperty('url')) {
                 const tileLayerMetadata = layerMetadata as ITilesMetadata;
                 this.addLayerToReferences( tileLayerMetadata.id, new TileLayer(tileLayerMetadata.url, {zIndex: 3}) );
-                this.map.addLayer(this.layerReferences[tileLayerMetadata.id]);
+            }
+            if (this.shouldBeVisible(layerMetadata)) {
+                this.map.addLayer(this.layerReferences[layerMetadata.id]);
             }
         });
     }
 
     private addLayerToReferences = (id: string, layer: ILeafletLayers) => {
       this.layerReferences[id] = layer;
+   }
+   private shouldBeVisible = (layerMetadata: ILayerMetadata): boolean => {
+       return layerMetadata.visible;
    }
 }
