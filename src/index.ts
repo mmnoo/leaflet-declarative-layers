@@ -9,20 +9,23 @@ export class DynamicLayers {
     constructor(targetMap: Map, layersMetadata: ILayersMetadata) {
         this.map = targetMap;
         layersMetadata.forEach((layerMetadata) => {
-            if (layerMetadata.hasOwnProperty('url')) {
-                const tileLayerMetadata = layerMetadata as ITilesMetadata;
-                this.addLayerToReferences( tileLayerMetadata.id, new TileLayer(tileLayerMetadata.url, {zIndex: 3}) );
-            }
-            if (this.shouldBeVisible(layerMetadata)) {
-                this.map.addLayer(this.layerReferences[layerMetadata.id]);
-            }
+            this.initializeLayer(layerMetadata);
         });
     }
 
+    private initializeLayer = (layerMetadata: ILayerMetadata): void => {
+        if (layerMetadata.hasOwnProperty('url')) {
+            const tileLayerMetadata = layerMetadata as ITilesMetadata;
+            this.addLayerToReferences( tileLayerMetadata.id, new TileLayer(tileLayerMetadata.url, {zIndex: 3}) );
+        }
+        if (this.shouldBeVisible(layerMetadata)) {
+            this.map.addLayer(this.layerReferences[layerMetadata.id]);
+        }
+    }
     private addLayerToReferences = (id: string, layer: ILeafletLayers) => {
       this.layerReferences[id] = layer;
-   }
-   private shouldBeVisible = (layerMetadata: ILayerMetadata): boolean => {
+    }
+    private shouldBeVisible = (layerMetadata: ILayerMetadata): boolean => {
        return layerMetadata.visible;
    }
 }
