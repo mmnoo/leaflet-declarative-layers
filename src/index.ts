@@ -2,7 +2,7 @@ import { ILayersMetadata, ILayerMetadata, ITilesMetadata, ILeafletLayers} from '
 import { Map } from 'leaflet';
 import { TileLayer } from 'leaflet';
 
-export class DynamicLayers {
+export class DeclarativeLayers {
     private map: Map;
     private layerReferences: {[state: string]: TileLayer} = {}; // reference for removal from map
 

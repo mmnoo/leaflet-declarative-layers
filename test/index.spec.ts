@@ -1,7 +1,7 @@
 import { Mock } from 'ts-mocks';
 import { Map } from 'leaflet';
 import { ILayersMetadata} from '../src/types';
-import { DynamicLayers } from '../src/index';
+import { DeclarativeLayers } from '../src/index';
 const layers: ILayersMetadata = [{
     id: 'testId1',
     label: 'testLabel1',
@@ -15,10 +15,10 @@ const layers: ILayersMetadata = [{
     visible: false,
 }];
 describe('initialization', () => {
-    it('adds visible layers only to the map', () => {
+    it('adds only visible layers to the map', () => {
         const MockMap = new Mock<Map>({addLayer: Mock.ANY_FUNC});
         const map = MockMap.Object;
-        const dynamicLayers = new DynamicLayers(map, layers);
+        const declativeLayers = new DeclarativeLayers(map, layers);
         expect(map.addLayer).toHaveBeenCalledTimes(1);
     });
 });

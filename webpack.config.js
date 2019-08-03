@@ -16,8 +16,8 @@ module.exports = {
         extensions: [ '.ts', '.js' ]
     },
     output: {
-        filename: 'leafletDynamicLayers.js',
+        filename: 'leafletDeclarativeLayers.js',
         path: path.resolve(__dirname, 'dist'),
-        library: 'leafletDynamicLayers' // appends bundle code to global scope
+        library: 'leafletDeclarativeLayers' // appends bundle code to global scope
     }
 };
