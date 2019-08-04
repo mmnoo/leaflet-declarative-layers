@@ -19,7 +19,12 @@
       var basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
       map.addLayer(basemap);   
       
-      var declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(map, declaredLayers);       
+      var declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(map, declaredLayers); 
+     
+      // optional access to layer references 
+      console.log('Layer references: ', declaredLayers.getLayerReferences());
+
+
     </script>
    </body>
   </html>
