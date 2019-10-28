@@ -9,12 +9,29 @@
     <script src="../dist/leafletDeclarativeLayers.js"></script>
     <script src="../node_modules/leaflet/dist/leaflet.js"></script>
     <script>
-      var declaredLayers = [{
-        id: 'tileLayer',
-        label: 'Tile Layer Example',
-        url: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
-        visible: true,
-      }];
+      var geojsonFeature = {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates: [-115, 49.5],
+        },
+      };
+      var declaredLayers = [
+        {
+          id: 'tileLayer',
+          label: 'Tile Layer Example',
+          url: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
+          visible: true,
+        }, 
+        {
+          id: 'geoJsonLayer',
+          label: 'GeoJSON Layer Example',
+          data: geojsonFeature,
+          visible: true
+
+        }
+      ];
       var map = new L.Map('map', { zoom: 8, center: new L.LatLng(49.5, -115)});
       var basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
       map.addLayer(basemap);   

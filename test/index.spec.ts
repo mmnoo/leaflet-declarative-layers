@@ -1,7 +1,16 @@
 import { Mock } from 'ts-mocks';
 import { Map, Layer, TileLayer } from 'leaflet';
-import { ILayersMetadata, ITilesMetadata} from '../src/types';
+import { ILayersMetadata, ITilesMetadata, ILeafletLayers} from '../src/dataTypes';
 import { DeclarativeLayers } from '../src/index';
+import { Feature } from '../node_modules/@types/geojson';
+const geojsonFeature: Feature = {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+        type: 'Point',
+        coordinates: [-104.99404, 39.75621],
+    },
+};
 const layers: ILayersMetadata = [{
     id: 'testTileLayer1',
     label: 'testTileLayer1',
@@ -14,10 +23,18 @@ const layers: ILayersMetadata = [{
     label: 'testTileLayer2',
     url: 'www.testTileLayer1Url.com',
     visible: false,
+},
+{
+    id: 'testGeoJsonLayer1',
+    label: 'testGeoJsonLayer1',
+    visible: true,
+    data: geojsonFeature,
 }];
 let map: Map;
 let MockMap: Mock<Map>;
 let declativeLayers: DeclarativeLayers;
+let testTileLayer1: TileLayer;
+let testTileLayer2: TileLayer;
 
 const initializateDeclarativeLayers = () => {
     MockMap = new Mock<Map>({
@@ -25,6 +42,8 @@ const initializateDeclarativeLayers = () => {
     });
     map = MockMap.Object;
     declativeLayers = new DeclarativeLayers(map, layers);
+    testTileLayer1 = declativeLayers.getLayerReferences().testTileLayer1 as TileLayer;
+    testTileLayer2 = declativeLayers.getLayerReferences().testTileLayer2 as TileLayer;
 };
 describe('declarative layers', () => {
     beforeEach(() => {
@@ -39,18 +58,28 @@ describe('declarative layers', () => {
     describe('access to layers refrences', () => {
         it('exposes references to added layers', () => {
            expect( Object.keys(declativeLayers.getLayerReferences()).length).toEqual(layers.length);
+           expect(declativeLayers.getLayerReferences().testTileLayer1).toBeDefined();
+           expect(declativeLayers.getLayerReferences().testTileLayer2).toBeDefined();
+           expect(declativeLayers.getLayerReferences().testGeoJsonLayer1).toBeDefined();
         });
     });
-    describe('tile layers', () => {
-        it('loads tile layers', () => {
-           expect(map.addLayer).toHaveBeenCalledWith(declativeLayers.getLayerReferences().testTileLayer1);
+    describe('addingLayers', () => {
+        it('shouldnt be called with undefined values', () => {
+            expect(map.addLayer).not.toHaveBeenCalledWith(undefined);
         });
-        it('passes the zIndex parameter', () => {
-            expect(declativeLayers.getLayerReferences().testTileLayer1.options.zIndex)
-            .toEqual((layers[0] as ITilesMetadata).zIndex);
-            expect(declativeLayers.getLayerReferences().testTileLayer2.options.zIndex)
-            .toBe((layers[1] as ITilesMetadata).zIndex);
-
+        describe('tile layers', () => {
+            it('loads tile layers', () => {
+               expect(map.addLayer).toHaveBeenCalledWith(testTileLayer1);
+            });
+            it('passes the zIndex parameter', () => {
+                expect(testTileLayer1.options.zIndex).toEqual((layers[0] as ITilesMetadata).zIndex);
+                expect(testTileLayer2.options.zIndex).toBe((layers[1] as ITilesMetadata).zIndex);
+            });
+        });
+        describe('GeoJson layers', () => {
+            it('should load GeoJson Layers', () => {
+                expect(map.addLayer).toHaveBeenCalledWith(declativeLayers.getLayerReferences().testGeoJsonLayer1);
+            });
         });
     });
 });
