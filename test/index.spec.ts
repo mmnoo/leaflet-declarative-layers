@@ -32,7 +32,7 @@ const layers: ILayersMetadata = [{
 }];
 let map: Map;
 let MockMap: Mock<Map>;
-let declativeLayers: DeclarativeLayers;
+let declarativeLayers: DeclarativeLayers;
 let testTileLayer1: TileLayer;
 let testTileLayer2: TileLayer;
 
@@ -41,9 +41,9 @@ const initializateDeclarativeLayers = () => {
         addLayer: Mock.ANY_FUNC,
     });
     map = MockMap.Object;
-    declativeLayers = new DeclarativeLayers(map, layers);
-    testTileLayer1 = declativeLayers.getLayerReferences().testTileLayer1 as TileLayer;
-    testTileLayer2 = declativeLayers.getLayerReferences().testTileLayer2 as TileLayer;
+    declarativeLayers = new DeclarativeLayers(map, layers);
+    testTileLayer1 = declarativeLayers.getLayerReferences().testTileLayer1 as TileLayer;
+    testTileLayer2 = declarativeLayers.getLayerReferences().testTileLayer2 as TileLayer;
 };
 describe('declarative layers', () => {
     beforeEach(() => {
@@ -57,10 +57,10 @@ describe('declarative layers', () => {
     });
     describe('access to layers refrences', () => {
         it('exposes references to added layers', () => {
-           expect( Object.keys(declativeLayers.getLayerReferences()).length).toEqual(layers.length);
-           expect(declativeLayers.getLayerReferences().testTileLayer1).toBeDefined();
-           expect(declativeLayers.getLayerReferences().testTileLayer2).toBeDefined();
-           expect(declativeLayers.getLayerReferences().testGeoJsonLayer1).toBeDefined();
+           expect( Object.keys(declarativeLayers.getLayerReferences()).length).toEqual(layers.length);
+           expect(declarativeLayers.getLayerReferences().testTileLayer1).toBeDefined();
+           expect(declarativeLayers.getLayerReferences().testTileLayer2).toBeDefined();
+           expect(declarativeLayers.getLayerReferences().testGeoJsonLayer1).toBeDefined();
         });
     });
     describe('addingLayers', () => {
@@ -78,7 +78,7 @@ describe('declarative layers', () => {
         });
         describe('GeoJson layers', () => {
             it('should load GeoJson Layers', () => {
-                expect(map.addLayer).toHaveBeenCalledWith(declativeLayers.getLayerReferences().testGeoJsonLayer1);
+                expect(map.addLayer).toHaveBeenCalledWith(declarativeLayers.getLayerReferences().testGeoJsonLayer1);
             });
         });
     });
