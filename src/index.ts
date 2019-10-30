@@ -21,6 +21,10 @@ export class DeclarativeLayers {
         return this.layerReferences;
     }
 
+    public addLayer = (layer: dataTypes.ILayerMetadata): void => {
+        this.initializeLayer(layer);
+    }
+
     private initializeLayer = (layerMetadata: dataTypes.ILayerMetadata): void => {
         if (dataTypes.isTilesType(layerMetadata)) {
             this.initializeTileLayer(layerMetadata as dataTypes.ITilesMetadata);
