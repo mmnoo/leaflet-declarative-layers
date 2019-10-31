@@ -39,6 +39,7 @@ let testTileLayer2: TileLayer;
 const initializateDeclarativeLayers = () => {
     MockMap = new Mock<Map>({
         addLayer: Mock.ANY_FUNC,
+        removeLayer: Mock.ANY_FUNC,
     });
     map = MockMap.Object;
     declarativeLayers = new DeclarativeLayers(map, layers);
@@ -82,7 +83,7 @@ describe('declarative layers', () => {
             });
         });
     });
-    describe('adding layers after initialization', () => {
+    describe('adding  and removing layers after initialization', () => {
         let newGeoJsonMetadataVisible: ILayerMetadata;
         let newGeoJsonMetadataInvisible: ILayerMetadata;
         let newTileLayerVisible: ILayerMetadata;
@@ -136,28 +137,40 @@ describe('declarative layers', () => {
             declarativeLayers.addLayer(newTileLayerInvisible);
             layerReferences = declarativeLayers.getLayerReferences();
         });
-        it('should add a new layer to the references regardless of if it tagged as visible', () => {
-            expect(layerReferences.testNewGeoJsonLayerVisible).toBeDefined();
-            expect(layerReferences.testNewGeoJsonLayerInvisible).toBeDefined();
-            expect(layerReferences.testNewTileLayerVisible).toBeDefined();
-            expect(layerReferences.testNewTileLayerInvisible).toBeDefined();
-        });
-        it('should add the new visible layers to the existing layers on the map', () => {
-            expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
-            expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewTileLayerVisible);
-        });
-        it('should NOT add a new layer with a false visible property to the map', () => {
-            expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerInvisible);
-            expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewTileLayerInvisible);
-        });
-        describe('including layer properties', () => {
-            it('should include zindex in added tile layers', () => {
-                expect((layerReferences.testNewTileLayerVisible as TileLayer).options.zIndex)
-                .toEqual((newTileLayerVisible as ITilesMetadata).zIndex);
-                expect((layerReferences.testNewTileLayerInvisible as TileLayer).options.zIndex)
-                .toEqual((newTileLayerInvisible as ITilesMetadata).zIndex);
+        describe('adding layers to the map and references post inititialization', () => {
+            it('should add a new layer to the references regardless of if it tagged as visible', () => {
+                expect(layerReferences.testNewGeoJsonLayerVisible).toBeDefined();
+                expect(layerReferences.testNewGeoJsonLayerInvisible).toBeDefined();
+                expect(layerReferences.testNewTileLayerVisible).toBeDefined();
+                expect(layerReferences.testNewTileLayerInvisible).toBeDefined();
+            });
+            it('should add the new visible layers to the existing layers on the map', () => {
+                expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
+                expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewTileLayerVisible);
+            });
+            it('should NOT add a new layer with a false visible property to the map', () => {
+                expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerInvisible);
+                expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewTileLayerInvisible);
+            });
+            describe('including layer properties', () => {
+                it('should include zindex in added tile layers', () => {
+                    expect((layerReferences.testNewTileLayerVisible as TileLayer).options.zIndex)
+                    .toEqual((newTileLayerVisible as ITilesMetadata).zIndex);
+                    expect((layerReferences.testNewTileLayerInvisible as TileLayer).options.zIndex)
+                    .toEqual((newTileLayerInvisible as ITilesMetadata).zIndex);
+                });
             });
         });
-
+        describe('removing layers from the map post inititialization', () => {
+            beforeEach(() => {
+                declarativeLayers.removeLayer(layerReferences.testNewGeoJsonLayerVisible);
+            });
+            it('should remove a layer from the map', () => {
+                expect(map.removeLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
+            });
+            it('the layer should still be available in the layer references', () => {
+                expect(layerReferences.testNewGeoJsonLayerVisible).toBeDefined();
+            });
+        });
     });
 });
