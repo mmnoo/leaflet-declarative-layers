@@ -10,11 +10,13 @@ export class DeclarativeLayers {
     private map: Map;
     private layerReferences: ILayerReference = {}; // reference for removal from map
 
-    constructor(targetMap: Map, layersMetadata: dataTypes.ILayersMetadata) {
+    constructor(targetMap: Map, layersMetadata?: dataTypes.ILayersMetadata) {
         this.map = targetMap;
-        layersMetadata.forEach((layerMetadata) => {
-            this.initializeLayer(layerMetadata);
-        });
+        if (layersMetadata) {
+            layersMetadata.forEach((layerMetadata) => {
+                this.initializeLayer(layerMetadata);
+            });
+        }
     }
 
     public getLayerReferences = () => {
