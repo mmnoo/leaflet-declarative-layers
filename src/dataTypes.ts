@@ -28,7 +28,7 @@ export type ILayerMetadata = ITilesMetadata | IGeoJsonMetadata | IImageMetadata;
 
 export interface ILayersMetadata extends Array<ILayerMetadata> {}
 
-export type ILeafletLayers = TileLayer | GeoJSON;
+export type ILeafletLayer = TileLayer | GeoJSON;
 
 // Type Guards
 export const isTilesType = (layer: any): layer is ITilesMetadata => {

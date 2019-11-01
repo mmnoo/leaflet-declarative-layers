@@ -1,8 +1,9 @@
 import { Mock } from 'ts-mocks';
-import { Map, Layer, TileLayer } from 'leaflet';
-import { ILayersMetadata, ITilesMetadata, ILeafletLayers, ILayerMetadata} from '../src/dataTypes';
+import { Map, TileLayer } from 'leaflet';
+import { ILayersMetadata, ITilesMetadata, ILayerMetadata, ILeafletLayer} from '../src/dataTypes';
 import { DeclarativeLayers, ILayerReference } from '../src/index';
 import { Feature } from '../node_modules/@types/geojson';
+import {_} from 'lodash';
 const geojsonFeature: Feature = {
     type: 'Feature',
     properties: {},
@@ -105,6 +106,7 @@ describe('declarative layers', () => {
             },
         };
         let layerReferences: ILayerReference;
+        let testAddLayerReference: ILeafletLayer;
         beforeEach(() => {
             newGeoJsonMetadataVisible = {
                 id: 'testNewGeoJsonLayerVisible',
@@ -131,7 +133,7 @@ describe('declarative layers', () => {
                 url: 'www.testNewTileLayerInvisibleUrl.com',
                 visible: false,
             };
-            declarativeLayers.addLayer(newGeoJsonMetadataVisible);
+            testAddLayerReference = declarativeLayers.addLayer(newGeoJsonMetadataVisible);
             declarativeLayers.addLayer(newGeoJsonMetadataInvisible);
             declarativeLayers.addLayer(newTileLayerVisible);
             declarativeLayers.addLayer(newTileLayerInvisible);
@@ -164,6 +166,9 @@ describe('declarative layers', () => {
         describe('removing layers from the map post inititialization', () => {
             beforeEach(() => {
                 declarativeLayers.removeLayer(layerReferences.testNewGeoJsonLayerVisible);
+        it('should return a reference to the added layer', () => {
+            expect(_.isEqual(testAddLayerReference, layerReferences.testNewGeoJsonLayerVisible)).toBeTruthy();
+        });
             });
             it('should remove a layer from the map', () => {
                 expect(map.removeLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
