@@ -1,9 +1,8 @@
 import * as dataTypes from './dataTypes';
-import { Map } from 'leaflet';
-import { TileLayer, GeoJSON } from 'leaflet';
+import { Map, TileLayer, GeoJSON } from 'leaflet';
 
 export interface ILayerReference {
-    [state: string]: dataTypes.ILeafletLayers;
+    [state: string]: dataTypes.ILeafletLayer;
 }
 
 export class DeclarativeLayers {
@@ -21,8 +20,10 @@ export class DeclarativeLayers {
     public getLayerReferences = () => {
         return this.layerReferences;
     }
-    public addLayer = (layer: dataTypes.ILayerMetadata): void => {
-        this.initializeLayer(layer);
+
+    public addLayer = (layerMetadata: dataTypes.ILayerMetadata): dataTypes.ILeafletLayer => {
+        this.initializeLayer(layerMetadata);
+        return this.layerReferences[layerMetadata.id];
     }
     public removeLayer = (layer: dataTypes.ILeafletLayers): void => {
         this.map.removeLayer(layer);
@@ -37,7 +38,7 @@ export class DeclarativeLayers {
             this.map.addLayer(this.layerReferences[layerMetadata.id]);
         }
     }
-    private addLayerToReferences = (id: string, layer: dataTypes.ILeafletLayers) => {
+    private addLayerToReferences = (id: string, layer: dataTypes.ILeafletLayer) => {
       this.layerReferences[id] = layer;
     }
     private shouldBeVisible = (layerMetadata: dataTypes.ILayerMetadata): boolean => {
