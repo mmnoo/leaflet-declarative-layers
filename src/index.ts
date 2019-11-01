@@ -18,15 +18,15 @@ export class DeclarativeLayers {
             });
         }
     }
-
     public getLayerReferences = () => {
         return this.layerReferences;
     }
-
     public addLayer = (layer: dataTypes.ILayerMetadata): void => {
         this.initializeLayer(layer);
     }
-
+    public removeLayer = (layer: dataTypes.ILeafletLayers): void => {
+        this.map.removeLayer(layer);
+    }
     private initializeLayer = (layerMetadata: dataTypes.ILayerMetadata): void => {
         if (dataTypes.isTilesType(layerMetadata)) {
             this.initializeTileLayer(layerMetadata as dataTypes.ITilesMetadata);
