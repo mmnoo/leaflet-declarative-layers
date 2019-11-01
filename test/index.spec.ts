@@ -16,19 +16,19 @@ const layers: ILayersMetadata = [{
     id: 'testTileLayer1',
     label: 'testTileLayer1',
     url: 'www.testTileLayer1url.com',
-    visible: true,
+    visibleInitially: true,
     zIndex: 3,
 },
 {
     id: 'testTileLayer2',
     label: 'testTileLayer2',
     url: 'www.testTileLayer1Url.com',
-    visible: false,
+    visibleInitially: false,
 },
 {
     id: 'testGeoJsonLayer1',
     label: 'testGeoJsonLayer1',
-    visible: true,
+    visibleInitially: true,
     data: geojsonFeature,
 }];
 let map: Map;
@@ -53,7 +53,7 @@ describe('declarative layers', () => {
     });
     describe('initialization', () => {
         it('adds only visible layers to the map', () => {
-            const visibleItems = layers.filter((layer) => layer.visible);
+            const visibleItems = layers.filter((layer) => layer.visibleInitially);
             expect(map.addLayer).toHaveBeenCalledTimes(visibleItems.length);
         });
     });
@@ -111,27 +111,27 @@ describe('declarative layers', () => {
             newGeoJsonMetadataVisible = {
                 id: 'testNewGeoJsonLayerVisible',
                 label: 'testNewGeoJsonLayerVisible',
-                visible: true,
+                visibleInitially: true,
                 data: newGeojsonFeatureVisible,
             };
             newGeoJsonMetadataInvisible = {
                 id: 'testNewGeoJsonLayerInvisible',
                 label: 'testNewGeoJsonLayerInvisible',
-                visible: false,
+                visibleInitially: false,
                 data: newGeojsonFeatureInvisible,
             };
             newTileLayerVisible = {
                 id: 'testNewTileLayerVisible',
                 label: 'testNewTileLayerVisible',
                 url: 'www.testNewTileLayerVisibleUrl.com',
-                visible: true,
+                visibleInitially: true,
                 zIndex: 9,
             };
             newTileLayerInvisible = {
                 id: 'testNewTileLayerInvisible',
                 label: 'testNewTileLayerInvisible',
                 url: 'www.testNewTileLayerInvisibleUrl.com',
-                visible: false,
+                visibleInitially: false,
             };
             testAddLayerReference = declarativeLayers.addLayer(newGeoJsonMetadataVisible);
             declarativeLayers.addLayer(newGeoJsonMetadataInvisible);

@@ -34,16 +34,16 @@ export class DeclarativeLayers {
         } else if (dataTypes.isGeoJsonType(layerMetadata)) {
             this.initializeGeoJsonLayer(layerMetadata as dataTypes.IGeoJsonMetadata);
         }
-        if (this.shouldBeVisible(layerMetadata)) {
+        if (this.shouldBeVisibleInitially(layerMetadata)) {
             this.map.addLayer(this.layerReferences[layerMetadata.id]);
         }
     }
     private addLayerToReferences = (id: string, layer: dataTypes.ILeafletLayer) => {
       this.layerReferences[id] = layer;
     }
-    private shouldBeVisible = (layerMetadata: dataTypes.ILayerMetadata): boolean => {
+    private shouldBeVisibleInitially = (layerMetadata: dataTypes.ILayerMetadata): boolean => {
         // if tagged as visible AND initialized
-       return layerMetadata.visible && !!this.layerReferences[layerMetadata.id];
+       return layerMetadata.visibleInitially && !!this.layerReferences[layerMetadata.id];
     }
     private initializeTileLayer = (layerMetadata: dataTypes.ITilesMetadata) => {
         const tileLayer: TileLayer = new TileLayer(layerMetadata.url, {zIndex: layerMetadata.zIndex});
