@@ -25,7 +25,7 @@ export class DeclarativeLayers {
         this.initializeLayer(layerMetadata);
         return this.layerReferences[layerMetadata.id];
     }
-    public removeLayer = (layer: dataTypes.ILeafletLayers): void => {
+    public removeLayer = (layer: dataTypes.ILeafletLayer): void => {
         this.map.removeLayer(layer);
     }
     private initializeLayer = (layerMetadata: dataTypes.ILayerMetadata): void => {

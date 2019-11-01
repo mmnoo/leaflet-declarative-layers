@@ -154,6 +154,9 @@ describe('declarative layers', () => {
                 expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerInvisible);
                 expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewTileLayerInvisible);
             });
+            it('should return a reference to the added layer', () => {
+                expect(_.isEqual(testAddLayerReference, layerReferences.testNewGeoJsonLayerVisible)).toBeTruthy();
+            });
             describe('including layer properties', () => {
                 it('should include zindex in added tile layers', () => {
                     expect((layerReferences.testNewTileLayerVisible as TileLayer).options.zIndex)
@@ -166,9 +169,7 @@ describe('declarative layers', () => {
         describe('removing layers from the map post inititialization', () => {
             beforeEach(() => {
                 declarativeLayers.removeLayer(layerReferences.testNewGeoJsonLayerVisible);
-        it('should return a reference to the added layer', () => {
-            expect(_.isEqual(testAddLayerReference, layerReferences.testNewGeoJsonLayerVisible)).toBeTruthy();
-        });
+
             });
             it('should remove a layer from the map', () => {
                 expect(map.removeLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
