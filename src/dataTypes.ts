@@ -1,6 +1,6 @@
-import { LatLngBounds, TileLayer, GeoJSON} from 'leaflet';
+import * as leaflet from 'leaflet';
 // TODO karma complains if import from 'geoJson'. Figure out more elegant solution.
-import { GeoJsonObject } from '../node_modules/@types/geojson/index';
+import * as geojson from '../node_modules/@types/geojson/index';
 
 export interface IBasicMetadata {
     label: string;
@@ -11,12 +11,14 @@ export interface IBasicMetadata {
 
 export interface IImageMetadata extends IBasicMetadata {
     file: string;
-    bounds: LatLngBounds;
+    bounds: leaflet.LatLngBounds;
     zIndex?: number; // zIndex relative to other raster layers
 }
 
 export interface IGeoJsonMetadata  extends IBasicMetadata {
-    data: GeoJsonObject;
+    data: geojson.GeoJsonObject;
+    options?: leaflet.GeoJSONOptions;
+    generateFeaturePopupContent?(feature: geojson.Feature): leaflet.Content;
 }
 
 export interface ITilesMetadata  extends IBasicMetadata {
@@ -28,7 +30,7 @@ export type ILayerMetadata = ITilesMetadata | IGeoJsonMetadata | IImageMetadata;
 
 export interface ILayersMetadata extends Array<ILayerMetadata> {}
 
-export type ILeafletLayer = TileLayer | GeoJSON;
+export type ILeafletLayer = leaflet.TileLayer | leaflet.GeoJSON;
 
 // Type Guards
 export const isTilesType = (layer: any): layer is ITilesMetadata => {

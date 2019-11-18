@@ -1,16 +1,22 @@
 import * as dataTypes from './dataTypes';
-import { Map, TileLayer, GeoJSON } from 'leaflet';
+// TODO karma complains if import from 'geoJson'. Figure out more elegant solution.
+import * as geoJson from '../node_modules/@types/geojson/index';
+import * as leafletTypes from '../node_modules/@types/leaflet/index';
 
 export interface ILayerReference {
     [state: string]: dataTypes.ILeafletLayer;
 }
 
 export class DeclarativeLayers {
-    private map: Map;
     private layerReferences: ILayerReference = {}; // reference for removal from map
 
-    constructor(targetMap: Map, layersMetadata?: dataTypes.ILayersMetadata) {
-        this.map = targetMap;
+    constructor(
+            private suppliedLeafletReference: typeof leafletTypes,
+            private map: leafletTypes.Map,
+            layersMetadata?: dataTypes.ILayersMetadata,
+        ) {
+        this.map = map;
+        this.suppliedLeafletReference = suppliedLeafletReference;
         if (layersMetadata) {
             layersMetadata.forEach((layerMetadata) => {
                 this.initializeLayer(layerMetadata);
@@ -46,11 +52,26 @@ export class DeclarativeLayers {
        return layerMetadata.visibleInitially && !!this.layerReferences[layerMetadata.id];
     }
     private initializeTileLayer = (layerMetadata: dataTypes.ITilesMetadata) => {
-        const tileLayer: TileLayer = new TileLayer(layerMetadata.url, {zIndex: layerMetadata.zIndex});
+        const tileLayer: leafletTypes.TileLayer =
+            new this.suppliedLeafletReference.TileLayer(layerMetadata.url, {zIndex: layerMetadata.zIndex});
         this.addLayerToReferences( layerMetadata.id,  tileLayer);
     }
     private initializeGeoJsonLayer = (layerMetadata: dataTypes.IGeoJsonMetadata) => {
-        const geoJsonLayer: GeoJSON = new GeoJSON(layerMetadata.data, {});
+        const options: leafletTypes.GeoJSONOptions = layerMetadata.options ? layerMetadata.options : {};
+        const computedOptions: leafletTypes.GeoJSONOptions = {
+            onEachFeature: (feature: geoJson.Feature, layer: leafletTypes.Layer): void => {
+                if (options.onEachFeature) {
+                    options.onEachFeature(feature, layer);
+                }
+                if (layerMetadata.generateFeaturePopupContent) {
+                    const popupContent: leafletTypes.Content = layerMetadata.generateFeaturePopupContent(feature);
+                    layer.bindPopup(popupContent);
+                }
+            },
+        };
+
+        const geoJsonLayer: leafletTypes.GeoJSON
+        = new this.suppliedLeafletReference.GeoJSON(layerMetadata.data, computedOptions);
         this.addLayerToReferences( layerMetadata.id,  geoJsonLayer);
     }
 }
