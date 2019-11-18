@@ -1,18 +1,38 @@
 import { Mock } from 'ts-mocks';
-import { Map, TileLayer } from 'leaflet';
-import { ILayersMetadata, ITilesMetadata, ILayerMetadata, ILeafletLayer} from '../src/dataTypes';
+import * as leaflet from 'leaflet';
+import * as dataTypes from '../src/dataTypes';
 import { DeclarativeLayers, ILayerReference } from '../src/index';
-import { Feature } from '../node_modules/@types/geojson';
+import * as geoJson from '../node_modules/@types/geojson';
 import {_} from 'lodash';
-const geojsonFeature: Feature = {
-    type: 'Feature',
-    properties: {},
-    geometry: {
-        type: 'Point',
-        coordinates: [-104.99404, 39.75621],
-    },
+let testingOnEach: number;
+const fakeFeatureClick = (e: leaflet.LeafletEvent) => {
+    map.flyTo(new leaflet.LatLng(-104.98999178409576, 39.74683938093904));
 };
-const layers: ILayersMetadata = [{
+const geojsonFeatureCollection: geoJson.FeatureCollection = {
+    type: 'FeatureCollection',
+    features: [
+        {
+            type: 'Feature',
+            properties: {
+                popupContent: '18th & California Light Rail Stop',
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [-104.98999178409576, 39.74683938093904],
+            },
+        }, {
+            type: 'Feature',
+            properties: {
+                popupContent: '20th & Welton Light Rail Stop',
+            },
+            geometry: {
+                type: 'Point',
+                coordinates: [-104.98689115047453, 39.747924136466565],
+            },
+        },
+    ],
+};
+const layers: dataTypes.ILayersMetadata = [{
     id: 'testTileLayer1',
     label: 'testTileLayer1',
     url: 'www.testTileLayer1url.com',
@@ -29,31 +49,43 @@ const layers: ILayersMetadata = [{
     id: 'testGeoJsonLayer1',
     label: 'testGeoJsonLayer1',
     visibleInitially: true,
-    data: geojsonFeature,
+    data: geojsonFeatureCollection,
+    options: {onEachFeature: (feature, layer) => {
+        testingOnEach += 1;
+    }},
+    generateFeaturePopupContent: (feature) => {
+        return feature.properties.popupContent;
+    },
 }];
-let map: Map;
-let MockMap: Mock<Map>;
+let map: leaflet.Map;
+let MockMap: Mock<leaflet.Map>;
 let declarativeLayers: DeclarativeLayers;
-let testTileLayer1: TileLayer;
-let testTileLayer2: TileLayer;
+let testTileLayer1: leaflet.TileLayer;
+let testTileLayer2: leaflet.TileLayer;
+let geoJsonLayer: leaflet.GeoJSON;
 
 const initializateDeclarativeLayers = () => {
-    MockMap = new Mock<Map>({
+    MockMap = new Mock<leaflet.Map>({
         addLayer: Mock.ANY_FUNC,
         removeLayer: Mock.ANY_FUNC,
+        flyTo: Mock.ANY_FUNC,
     });
     map = MockMap.Object;
-    declarativeLayers = new DeclarativeLayers(map, layers);
-    testTileLayer1 = declarativeLayers.getLayerReferences().testTileLayer1 as TileLayer;
-    testTileLayer2 = declarativeLayers.getLayerReferences().testTileLayer2 as TileLayer;
+    declarativeLayers = new DeclarativeLayers(leaflet, map, layers);
+    testTileLayer1 = declarativeLayers.getLayerReferences().testTileLayer1 as leaflet.TileLayer;
+    testTileLayer2 = declarativeLayers.getLayerReferences().testTileLayer2 as leaflet.TileLayer;
+    geoJsonLayer = declarativeLayers.getLayerReferences().testGeoJsonLayer1 as leaflet.GeoJSON;
 };
 describe('declarative layers', () => {
-    beforeEach(() => {
+    beforeEach((done) => {
+        testingOnEach = 0;
+        spyOn(leaflet.Layer.prototype, 'bindPopup');
         initializateDeclarativeLayers();
+        done();
     });
     describe('initialization', () => {
         it('adds only visible layers to the map', () => {
-            const visibleItems = layers.filter((layer) => layer.visibleInitially);
+            const visibleItems = layers.filter((layerItem) => layerItem.visibleInitially);
             expect(map.addLayer).toHaveBeenCalledTimes(visibleItems.length);
         });
     });
@@ -74,8 +106,8 @@ describe('declarative layers', () => {
                expect(map.addLayer).toHaveBeenCalledWith(testTileLayer1);
             });
             it('passes the zIndex parameter', () => {
-                expect(testTileLayer1.options.zIndex).toEqual((layers[0] as ITilesMetadata).zIndex);
-                expect(testTileLayer2.options.zIndex).toBe((layers[1] as ITilesMetadata).zIndex);
+                expect(testTileLayer1.options.zIndex).toEqual((layers[0] as dataTypes.ITilesMetadata).zIndex);
+                expect(testTileLayer2.options.zIndex).toBe((layers[1] as dataTypes.ITilesMetadata).zIndex);
             });
         });
         describe('GeoJson layers', () => {
@@ -83,13 +115,23 @@ describe('declarative layers', () => {
                 expect(map.addLayer).toHaveBeenCalledWith(declarativeLayers.getLayerReferences().testGeoJsonLayer1);
             });
         });
+        describe('popups', () => {
+            const geoJsonMetadataWithPopup = layers[2] as dataTypes.IGeoJsonMetadata;
+            it('should bind popups to a layer', () => {
+                expect(geoJsonLayer.bindPopup)
+                .toHaveBeenCalledWith(geojsonFeatureCollection.features[0].properties.popupContent);
+            });
+            it('shouldnt interfere with other options using onEachFeature', () => {
+               expect(testingOnEach).toEqual(2);
+            });
+        });
     });
     describe('adding  and removing layers after initialization', () => {
-        let newGeoJsonMetadataVisible: ILayerMetadata;
-        let newGeoJsonMetadataInvisible: ILayerMetadata;
-        let newTileLayerVisible: ILayerMetadata;
-        let newTileLayerInvisible: ILayerMetadata;
-        const newGeojsonFeatureVisible: Feature = {
+        let newGeoJsonMetadataVisible: dataTypes.ILayerMetadata;
+        let newGeoJsonMetadataInvisible: dataTypes.ILayerMetadata;
+        let newTileLayerVisible: dataTypes.ILayerMetadata;
+        let newTileLayerInvisible: dataTypes.ILayerMetadata;
+        const newGeojsonFeatureVisible: geoJson.Feature = {
             type: 'Feature',
             properties: {},
             geometry: {
@@ -97,7 +139,7 @@ describe('declarative layers', () => {
                 coordinates: [-104.99404, 39.75621],
             },
         };
-        const newGeojsonFeatureInvisible: Feature = {
+        const newGeojsonFeatureInvisible: geoJson.Feature = {
             type: 'Feature',
             properties: {},
             geometry: {
@@ -106,7 +148,7 @@ describe('declarative layers', () => {
             },
         };
         let layerReferences: ILayerReference;
-        let testAddLayerReference: ILeafletLayer;
+        let testAddLayerReference: dataTypes.ILeafletLayer;
         beforeEach(() => {
             newGeoJsonMetadataVisible = {
                 id: 'testNewGeoJsonLayerVisible',
@@ -159,10 +201,10 @@ describe('declarative layers', () => {
             });
             describe('including layer properties', () => {
                 it('should include zindex in added tile layers', () => {
-                    expect((layerReferences.testNewTileLayerVisible as TileLayer).options.zIndex)
-                    .toEqual((newTileLayerVisible as ITilesMetadata).zIndex);
-                    expect((layerReferences.testNewTileLayerInvisible as TileLayer).options.zIndex)
-                    .toEqual((newTileLayerInvisible as ITilesMetadata).zIndex);
+                    expect((layerReferences.testNewTileLayerVisible as leaflet.TileLayer).options.zIndex)
+                    .toEqual((newTileLayerVisible as dataTypes.ITilesMetadata).zIndex);
+                    expect((layerReferences.testNewTileLayerInvisible as leaflet.TileLayer).options.zIndex)
+                    .toEqual((newTileLayerInvisible as dataTypes.ITilesMetadata).zIndex);
                 });
             });
         });

@@ -12,7 +12,7 @@
      <br/>
      <button id="removeVisibleTile">Remove visible=true Layer From Map (Stamen Tiles - Terrain)</button> Click removes layer from map. Reference to layer still available.
     <script src="../dist/leafletDeclarativeLayers.js"></script>
-    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="../node_modules/leaflet/dist/leaflet-src.js"></script>
     <script>
       var geojsonFeature = {
         type: 'Feature',
@@ -46,7 +46,7 @@
       var basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
       map.addLayer(basemap);   
       
-      var declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(map); 
+      var declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(L, map); 
 
       //add a visible layer
       document.getElementById('addVisibleTile').addEventListener('click', () => {

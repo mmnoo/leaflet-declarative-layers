@@ -7,15 +7,31 @@
    <body>
      <div id="map" style="height: 400px; width: 400px; border: solid thin gray;"></div>
     <script src="../dist/leafletDeclarativeLayers.js"></script>
-    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="../node_modules/leaflet/dist/leaflet-src.js"></script>
     <script>
-      var geojsonFeature = {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'Point',
-          coordinates: [-115, 49.5],
-        },
+      var geojsonFeatureCollection = {
+        type: 'FeatureCollection',
+        features: [
+            {
+                type: 'Feature',
+                properties: {
+                    popupContent: '18th & California Light Rail Stop'
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [-115, 49.5]
+                },
+            }, {
+                type: 'Feature',
+                properties: {
+                    popupContent: '20th & Welton Light Rail Stop'
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [-115.1, 49.51]
+                },
+            },
+        ],
       };
       var layerMetadata = [
         {
@@ -27,8 +43,11 @@
         {
           id: 'geoJsonLayer',
           label: 'GeoJSON Layer Example',
-          data: geojsonFeature,
-          visibleInitially: true
+          data: geojsonFeatureCollection,
+          visibleInitially: true,
+          generateFeaturePopupContent: (feature) => {
+            return feature.properties.popupContent;
+          },
 
         }
       ];
@@ -36,7 +55,7 @@
       var basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
       map.addLayer(basemap);   
       
-      var declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(map, layerMetadata); 
+      var declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(L, map, layerMetadata); 
      
       // optional access to layer references 
       console.log('Layer references: ', declaredLayers.getLayerReferences());
