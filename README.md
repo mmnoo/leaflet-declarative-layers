@@ -98,7 +98,7 @@ This means you can use it like you would any other Leaflet layer. For example:
 |addLayer(`{metadata}`)| Leaflet layer reference for added layer|Adds a single layer to the map. A single metadata object parameter is required.|
 |removeLayer(`Leaflet layer reference`) |`void`| Removes a layer from the map. The required Leaflet layer reference parameter can be obtained from the `getLayerReference` method or via other Leaflet methods.  
 
-## Currently available metadata properties 
+## Currently Available Metadata Properties 
 ### Tile Layers (documentation to come)
 ### Image Layers (documentation to come)
 ### GeoJson Layers
