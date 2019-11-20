@@ -1,4 +1,14 @@
-A leaflet plugin to abstract away some details of adding data layers to a Leaflet map. Users just need to describe their data with a json object rather than adding each layer with redundant imperative code. Access to map layer references are available, so a user may still access full Leaflet layer methods and features. This project is definitely a work-in-progress and open to contributions. 
+A Leaflet plugin to make adding map layers easier. Users just need to describe their data with an array of JSON 'metadata' objects rather than adding each layer with redundant imperative code. Access to map layer references are available, so a user may still access full Leaflet layer methods and features. This project is definitely a work-in-progress and open to contributions. 
+
+<div class="panel panel-warning">
+**Warning**
+{: .panel-heading}
+<div class="panel-body">
+
+This documentation is also a work-in-progress. The intention is to keep it current, but its likely already out of date. Please submit an issue or pull request if you notice any needed improvements! 
+
+</div>
+</div>
 
 ## Project setup
 
@@ -82,13 +92,18 @@ This means you can use it like you would any other Leaflet layer. For example:
 ```declaredLayers.getLayerReferences().tileLayer.redraw()```
 
 ## Methods
-|Method|Description|
-|---|---|
-|getLayerReferences()| Returns an `Object` containing references to all of the Leaflet layers added via the `DeclarativeLayers` class. Individual layers will be accessible by their id as specified in the metadata. 
-|addLayer(`{metadata}`)| Adds a single layer to the map. A single metadata object parameter is required.|
-|removeLayer(`Leaflet layer reference`) | Removes a layer from the map. The required Leaflet layer reference parameter can be obtained from the `getLayerReference` method or via other Leaflet methods.  
+|Method|Returns|Description|
+|---|---|---|
+|getLayerReferences()| `Object` of  references to Leaflet layers|Returns an `Object` containing references to all of the Leaflet layers added via the `DeclarativeLayers` class. Individual layers will be accessible by their id as specified in the metadata. 
+|addLayer(`{metadata}`)| Leaflet layer reference for added layer|Adds a single layer to the map. A single metadata object parameter is required.|
+|removeLayer(`Leaflet layer reference`) |`void`| Removes a layer from the map. The required Leaflet layer reference parameter can be obtained from the `getLayerReference` method or via other Leaflet methods.  
 
-## Metadata properties
+## Currently available metadata properties 
 ### Tile Layers (documentation to come)
-### Image Layers (dosumentation to come)
-### GeoJson Layers (documentation to come)
+### Image Layers (documentation to come)
+### GeoJson Layers
+|Property|Required/Optional|Description|
+|---|---|---|
+|data|Required| A `GeoJson` object|
+|options| Optional|A Leaflet `GeoJsonOptions` object. See Leaflet documentation.|
+|generateFeaturePopupContent(`function(feature){}`)|Optional| A function to generate a Leaflet pop up window for each GeoJson feature in a layer when it is clicked. The single required parameter is a function that returns either a `string` or `HTML element`. E.g.: `generateFeaturePopupContent: (feature) => { return feature.properties.popupContent;},` or `generateFeaturePopupContent: () => { return 'I'm a string'},`
