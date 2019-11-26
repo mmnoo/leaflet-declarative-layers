@@ -1,25 +1,28 @@
 {
-  "name": "ts-boilerplate",
-  "version": "0.0.0",
+  "name": "leaflet-declarative-layers",
+  "version": "0.1.0",
   "description": "",
-  "private": true,
+  "private": false,
   "scripts": {
     "clean": "rm -rf ./dist",
     "lint": "tslint src/**/*.ts --format stylish",
     "bundle": "npm run clean && webpack",
     "test": "karma start",
-    "build": "npm run lint && npm run test && npm run bundle"
+    "build": "npm run lint && npm run test && npm run bundle",
+    "prepublish": "npm run build"
   },
+  "files": ["/dist"],
+  "browser": "/dist/leafletDeclarativeLayers.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mmmelissa/leaflet-dynamic-layers.git"
+    "url": "git+https://github.com/mmnoo/leaflet-declarative-layers.git"
   },
   "author": "Melissa Nunes",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/mmmelissa/leaflet-dynamic-layers/issues"
+    "url": "https://github.com/mmnoo/leaflet-declarative-layers/issues"
   },
-  "homepage": "https://github.com/mmmelissa/leaflet-dynamic-layers#readme",
+  "homepage": "https://github.com/mmnoo/leaflet-declarative-layers#readme",
   "devDependencies": {
     "@types/geojson": "^7946.0.7",
     "@types/jasmine": "^3.3.13",
@@ -31,6 +34,7 @@
     "karma-cli": "^2.0.0",
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^4.1.1",
+    "lodash": "^4.17.15",
     "ts-loader": "^6.0.4",
     "ts-mocks": "^2.3.4",
     "tslint": "^5.18.0",
@@ -38,8 +42,7 @@
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5"
   },
-  "dependencies": {
-    "leaflet": "^1.5.1",
-    "lodash": "^4.17.15"
+  "peerDependencies": {
+    "leaflet": "^1.5.1"
   }
 }

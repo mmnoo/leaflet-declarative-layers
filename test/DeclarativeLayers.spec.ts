@@ -1,14 +1,17 @@
 import { Mock } from 'ts-mocks';
 import * as leaflet from 'leaflet';
 import * as dataTypes from '../src/dataTypes';
-import { DeclarativeLayers, ILayerReference } from '../src/index';
-import * as geoJson from '../node_modules/@types/geojson';
+import { DeclarativeLayers, ILayerReference } from '../src/DeclarativeLayers';
 import {_} from 'lodash';
+import {
+    FeatureCollection as geoJsonFeatureCollection,
+    Feature as geoJsonFeature,
+} from '../node_modules/@types/geojson/index';
 let testingOnEach: number;
 const fakeFeatureClick = (e: leaflet.LeafletEvent) => {
     map.flyTo(new leaflet.LatLng(-104.98999178409576, 39.74683938093904));
 };
-const geojsonFeatureCollection: geoJson.FeatureCollection = {
+const geojsonFeatureCollection: geoJsonFeatureCollection = {
     type: 'FeatureCollection',
     features: [
         {
@@ -131,7 +134,7 @@ describe('declarative layers', () => {
         let newGeoJsonMetadataInvisible: dataTypes.ILayerMetadata;
         let newTileLayerVisible: dataTypes.ILayerMetadata;
         let newTileLayerInvisible: dataTypes.ILayerMetadata;
-        const newGeojsonFeatureVisible: geoJson.Feature = {
+        const newGeojsonFeatureVisible: geoJsonFeature = {
             type: 'Feature',
             properties: {},
             geometry: {
@@ -139,7 +142,7 @@ describe('declarative layers', () => {
                 coordinates: [-104.99404, 39.75621],
             },
         };
-        const newGeojsonFeatureInvisible: geoJson.Feature = {
+        const newGeojsonFeatureInvisible: geoJsonFeature = {
             type: 'Feature',
             properties: {},
             geometry: {

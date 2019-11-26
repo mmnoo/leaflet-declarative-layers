@@ -18,6 +18,5 @@ module.exports = {
     output: {
         filename: 'leafletDeclarativeLayers.js',
         path: path.resolve(__dirname, 'dist'),
-        library: 'leafletDeclarativeLayers' // appends bundle code to global scope
     }
 };
