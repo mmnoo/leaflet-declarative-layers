@@ -82,8 +82,8 @@ const map = new L.Map('map', { zoom: 8, center: new L.LatLng(49.5, -115)});
 const basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
 map.addLayer(basemap); 
 
-// initialize leaflet-declarative-layers with a reference to the same Leaflet instance that the map is using, the map, and the metadata array
-const declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(L, map, layerMetadata); 
+// initialize leaflet-declarative-layers with the map, and the metadata array
+const declaredLayers = new L.DeclarativeLayers(map, layerMetadata); 
 ```
 
 ### One can access any of the layer references by the id used in the metadata
