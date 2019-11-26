@@ -6,8 +6,8 @@
    </head>
    <body>
      <div id="map" style="height: 400px; width: 400px; border: solid thin gray;"></div>
-    <script src="../dist/leafletDeclarativeLayers.js"></script>
     <script src="../node_modules/leaflet/dist/leaflet-src.js"></script>
+    <script src="../dist/leafletDeclarativeLayers.js"></script>
     <script>
       const geojsonFeatureCollection = {
         type: 'FeatureCollection',
@@ -55,8 +55,8 @@
       const basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
       map.addLayer(basemap);   
       
-      const declaredLayers = new leafletDeclarativeLayers.DeclarativeLayers(L, map, layerMetadata); 
-     
+      const declaredLayers = new L.DeclarativeLayers(map, layerMetadata);
+      
       // optional access to layer references 
       console.log('Layer references: ', declaredLayers.getLayerReferences());
 

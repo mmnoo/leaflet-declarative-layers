@@ -22,6 +22,7 @@ module.exports = function(config) {
 
     // list of files / patterns to exclude
     exclude: [
+      './src/index.ts', // requires Leaflet reference in IIFE in browser, a Leaflet convention
     ],
 
 
