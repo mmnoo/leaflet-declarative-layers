@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "lint": "tslint src/**/*.ts --format stylish",
-    "bundle": "npm run clean && webpack",
+    "bundle": "npm run clean && webpack --mode=production",
+    "bundle-dev": "npm run clean && webpack --mode=development",
     "test": "karma start",
     "build": "npm run lint && npm run test && npm run bundle",
     "prepublish": "npm run build"
