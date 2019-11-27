@@ -59,12 +59,12 @@ export class DeclarativeLayers {
     }
     private initializeTileLayer = (layerMetadata: dataTypes.ITilesMetadata) => {
         const tileLayer: leafletTypes.TileLayer =
-            new this.suppliedLeafletReference.TileLayer(layerMetadata.url, {zIndex: layerMetadata.zIndex});
+            new this.suppliedLeafletReference.TileLayer(layerMetadata.url, layerMetadata.options);
         this.addLayerToReferences( layerMetadata.id,  tileLayer);
     }
     private initializeGeoJsonLayer = (layerMetadata: dataTypes.IGeoJsonMetadata) => {
         const options: leafletTypes.GeoJSONOptions = layerMetadata.options ? layerMetadata.options : {};
-        const computedOptions: leafletTypes.GeoJSONOptions = {
+        const onEachFeatureOptions: leafletTypes.GeoJSONOptions = {
             onEachFeature: (feature: geoJson.Feature, layer: leafletTypes.Layer): void => {
                 if (options.onEachFeature) {
                     options.onEachFeature(feature, layer);
@@ -75,9 +75,9 @@ export class DeclarativeLayers {
                 }
             },
         };
-
+        const mergedOptions: leafletTypes.GeoJSONOptions = {...options, ...onEachFeatureOptions};
         const geoJsonLayer: leafletTypes.GeoJSON
-        = new this.suppliedLeafletReference.GeoJSON(layerMetadata.data, computedOptions);
+        = new this.suppliedLeafletReference.GeoJSON(layerMetadata.data, mergedOptions);
         this.addLayerToReferences( layerMetadata.id,  geoJsonLayer);
     }
 }

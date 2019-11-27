@@ -41,12 +41,18 @@ const layers: dataTypes.ILayersMetadata = [{
     url: 'www.testTileLayer1url.com',
     visibleInitially: true,
     zIndex: 3,
+    options: {
+        zIndex: 3,
+    },
 },
 {
     id: 'testTileLayer2',
     label: 'testTileLayer2',
     url: 'www.testTileLayer1Url.com',
     visibleInitially: false,
+    options: {
+        maxZoom: 2,
+    },
 },
 {
     id: 'testGeoJsonLayer1',
@@ -108,9 +114,9 @@ describe('declarative layers', () => {
             it('loads tile layers', () => {
                expect(map.addLayer).toHaveBeenCalledWith(testTileLayer1);
             });
-            it('passes the zIndex parameter', () => {
-                expect(testTileLayer1.options.zIndex).toEqual((layers[0] as dataTypes.ITilesMetadata).zIndex);
-                expect(testTileLayer2.options.zIndex).toBe((layers[1] as dataTypes.ITilesMetadata).zIndex);
+            it('passes the tile layer options', () => {
+                expect(testTileLayer1.options.zIndex).toEqual((layers[0] as dataTypes.ITilesMetadata).options.zIndex);
+                expect(testTileLayer2.options.maxZoom).toBe((layers[1] as dataTypes.ITilesMetadata).options.maxZoom);
             });
         });
         describe('GeoJson layers', () => {
@@ -158,6 +164,7 @@ describe('declarative layers', () => {
                 label: 'testNewGeoJsonLayerVisible',
                 visibleInitially: true,
                 data: newGeojsonFeatureVisible,
+                options: { attribution: 'fjdskl' },
             };
             newGeoJsonMetadataInvisible = {
                 id: 'testNewGeoJsonLayerInvisible',
@@ -170,13 +177,16 @@ describe('declarative layers', () => {
                 label: 'testNewTileLayerVisible',
                 url: 'www.testNewTileLayerVisibleUrl.com',
                 visibleInitially: true,
-                zIndex: 9,
+                options: {
+                    zIndex: 9,
+                },
             };
             newTileLayerInvisible = {
                 id: 'testNewTileLayerInvisible',
                 label: 'testNewTileLayerInvisible',
                 url: 'www.testNewTileLayerInvisibleUrl.com',
                 visibleInitially: false,
+                options: { maxZoom: 3},
             };
             testAddLayerReference = declarativeLayers.addLayer(newGeoJsonMetadataVisible);
             declarativeLayers.addLayer(newGeoJsonMetadataInvisible);
@@ -202,12 +212,16 @@ describe('declarative layers', () => {
             it('should return a reference to the added layer', () => {
                 expect(_.isEqual(testAddLayerReference, layerReferences.testNewGeoJsonLayerVisible)).toBeTruthy();
             });
-            describe('including layer properties', () => {
-                it('should include zindex in added tile layers', () => {
+            describe('including layer options', () => {
+                it('should pass on tileLayer options to the Leaflet layer', () => {
                     expect((layerReferences.testNewTileLayerVisible as leaflet.TileLayer).options.zIndex)
-                    .toEqual((newTileLayerVisible as dataTypes.ITilesMetadata).zIndex);
-                    expect((layerReferences.testNewTileLayerInvisible as leaflet.TileLayer).options.zIndex)
-                    .toEqual((newTileLayerInvisible as dataTypes.ITilesMetadata).zIndex);
+                     .toEqual((newTileLayerVisible as dataTypes.ITilesMetadata).options.zIndex);
+                    expect((layerReferences.testNewTileLayerInvisible as leaflet.TileLayer).options.maxZoom)
+                    .toEqual((newTileLayerInvisible as dataTypes.ITilesMetadata).options.maxZoom);
+                });
+                it('should pass on GeoJSON options to the Leaflet layer', () => {
+                    expect(layerReferences.testNewGeoJsonLayerVisible.options.attribution)
+                    .toEqual(newGeoJsonMetadataVisible.options.attribution);
                 });
             });
         });

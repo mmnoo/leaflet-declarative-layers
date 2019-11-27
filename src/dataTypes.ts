@@ -9,11 +9,11 @@ export interface IBasicMetadata {
     legend?: string; // path to legend image
 }
 
-export interface IImageMetadata extends IBasicMetadata {
-    file: string;
-    bounds: leaflet.LatLngBounds;
-    zIndex?: number; // zIndex relative to other raster layers
-}
+// export interface IImageMetadata extends IBasicMetadata {
+//     file: string;
+//     bounds: leaflet.LatLngBounds;
+//     zIndex?: number; // zIndex relative to other raster layers
+// }
 
 export interface IGeoJsonMetadata  extends IBasicMetadata {
     data: geojson.GeoJsonObject;
@@ -24,9 +24,10 @@ export interface IGeoJsonMetadata  extends IBasicMetadata {
 export interface ITilesMetadata  extends IBasicMetadata {
     url: string;
     zIndex?: number; // zIndex relative to other raster layers
+    options?: leaflet.TileLayerOptions;
 }
 
-export type ILayerMetadata = ITilesMetadata | IGeoJsonMetadata | IImageMetadata;
+export type ILayerMetadata = ITilesMetadata | IGeoJsonMetadata;
 
 export interface ILayersMetadata extends Array<ILayerMetadata> {}
 
