@@ -41,15 +41,21 @@ export class DeclarativeLayers {
         this.map.removeLayer(layer);
     }
     private initializeLayer = (layerMetadata: dataTypes.ILayerMetadata): void => {
-        if (dataTypes.isTilesType(layerMetadata)) {
-            this.initializeTileLayer(layerMetadata as dataTypes.ITilesMetadata);
-        } else if (dataTypes.isGeoJsonType(layerMetadata)) {
-            this.initializeGeoJsonLayer(layerMetadata as dataTypes.IGeoJsonMetadata);
-        } else if (dataTypes.isImageOverlayType(layerMetadata)) {
-            this.initializeImageOverlayLayer(layerMetadata as dataTypes.IImageOverlayMetadata);
-        }
+        const layer: dataTypes.ILeafletLayer = this.createLeafletLayer(layerMetadata);
+        this.addLayerToReferences(layerMetadata.id, layer);
         if (this.shouldBeVisibleInitially(layerMetadata)) {
             this.map.addLayer(this.layerReferences[layerMetadata.id]);
+        }
+    }
+    private createLeafletLayer = (layerMetadata: dataTypes.ILayerMetadata): dataTypes.ILeafletLayer => {
+        if (dataTypes.isTilesType(layerMetadata)) {
+            return this.initializeTileLayer(layerMetadata as dataTypes.ITilesMetadata);
+        } else if (dataTypes.isGeoJsonType(layerMetadata)) {
+            return this.initializeGeoJsonLayer(layerMetadata as dataTypes.IGeoJsonMetadata);
+        } else if (dataTypes.isImageOverlayType(layerMetadata)) {
+            return this.initializeImageOverlayLayer(layerMetadata as dataTypes.IImageOverlayMetadata);
+        } else {
+            throw new Error(`the data type for ${layerMetadata!.id} isnt currently supported`);
         }
     }
     private addLayerToReferences = (id: string, layer: dataTypes.ILeafletLayer) => {
@@ -60,14 +66,11 @@ export class DeclarativeLayers {
        return layerMetadata.visibleInitially && !!this.layerReferences[layerMetadata.id];
     }
     private initializeTileLayer = (layerMetadata: dataTypes.ITilesMetadata) => {
-        const tileLayer: leafletTypes.TileLayer =
-            new this.suppliedLeafletReference.TileLayer(layerMetadata.url, layerMetadata.options);
-        this.addLayerToReferences( layerMetadata.id,  tileLayer);
+        return new this.suppliedLeafletReference.TileLayer(layerMetadata.url, layerMetadata.options);
     }
     private initializeImageOverlayLayer = (layerMetadata: dataTypes.IImageOverlayMetadata) => {
-        const imageOverlay: leafletTypes.ImageOverlay =
-        new this.suppliedLeafletReference.ImageOverlay(layerMetadata.url, layerMetadata.bounds, layerMetadata.options);
-        this.addLayerToReferences (layerMetadata.id, imageOverlay);
+        return new this.suppliedLeafletReference.ImageOverlay
+        (layerMetadata.url, layerMetadata.bounds, layerMetadata.options);
     }
     private initializeGeoJsonLayer = (layerMetadata: dataTypes.IGeoJsonMetadata) => {
         const options: leafletTypes.GeoJSONOptions = layerMetadata.options ? layerMetadata.options : {};
@@ -83,8 +86,6 @@ export class DeclarativeLayers {
             },
         };
         const mergedOptions: leafletTypes.GeoJSONOptions = {...options, ...onEachFeatureOptions};
-        const geoJsonLayer: leafletTypes.GeoJSON
-        = new this.suppliedLeafletReference.GeoJSON(layerMetadata.data, mergedOptions);
-        this.addLayerToReferences( layerMetadata.id,  geoJsonLayer);
+        return new this.suppliedLeafletReference.GeoJSON(layerMetadata.data, mergedOptions);
     }
 }
