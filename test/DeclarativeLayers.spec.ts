@@ -40,7 +40,6 @@ const layers: dataTypes.ILayersMetadata = [{
     label: 'testTileLayer1',
     url: 'www.testTileLayer1url.com',
     visibleInitially: true,
-    zIndex: 3,
     options: {
         zIndex: 3,
     },

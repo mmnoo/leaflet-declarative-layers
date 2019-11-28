@@ -23,7 +23,6 @@ export interface IGeoJsonMetadata  extends IBasicMetadata {
 
 export interface ITilesMetadata  extends IBasicMetadata {
     url: string;
-    zIndex?: number; // zIndex relative to other raster layers
     options?: leaflet.TileLayerOptions;
 }
 
