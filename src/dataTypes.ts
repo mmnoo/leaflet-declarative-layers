@@ -9,11 +9,11 @@ export interface IBasicMetadata {
     legend?: string; // path to legend image
 }
 
-// export interface IImageMetadata extends IBasicMetadata {
-//     file: string;
-//     bounds: leaflet.LatLngBounds;
-//     zIndex?: number; // zIndex relative to other raster layers
-// }
+export interface IImageOverlayMetadata extends IBasicMetadata {
+    url: string;
+    bounds: leaflet.LatLngBoundsExpression;
+    options?: leaflet.ImageOverlayOptions;
+}
 
 export interface IGeoJsonMetadata  extends IBasicMetadata {
     data: geojson.GeoJsonObject;
@@ -23,20 +23,22 @@ export interface IGeoJsonMetadata  extends IBasicMetadata {
 
 export interface ITilesMetadata  extends IBasicMetadata {
     url: string;
-    zIndex?: number; // zIndex relative to other raster layers
     options?: leaflet.TileLayerOptions;
 }
 
-export type ILayerMetadata = ITilesMetadata | IGeoJsonMetadata;
+export type ILayerMetadata = ITilesMetadata | IGeoJsonMetadata | IImageOverlayMetadata;
 
 export interface ILayersMetadata extends Array<ILayerMetadata> {}
 
-export type ILeafletLayer = leaflet.TileLayer | leaflet.GeoJSON;
+export type ILeafletLayer = leaflet.TileLayer | leaflet.GeoJSON | leaflet.ImageOverlay;
 
 // Type Guards
 export const isTilesType = (layer: any): layer is ITilesMetadata => {
-    return layer.url !== undefined;
+    return (layer.url !== undefined && layer.bounds === undefined);
 };
 export const isGeoJsonType = (layer: any): layer is IGeoJsonMetadata => {
     return layer.data !== undefined;
+};
+export const isImageOverlayType = (layer: any): layer is IImageOverlayMetadata => {
+    return (layer.bounds !== undefined && layer.url !== undefined);
 };

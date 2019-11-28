@@ -45,6 +45,8 @@ export class DeclarativeLayers {
             this.initializeTileLayer(layerMetadata as dataTypes.ITilesMetadata);
         } else if (dataTypes.isGeoJsonType(layerMetadata)) {
             this.initializeGeoJsonLayer(layerMetadata as dataTypes.IGeoJsonMetadata);
+        } else if (dataTypes.isImageOverlayType(layerMetadata)) {
+            this.initializeImageOverlayLayer(layerMetadata as dataTypes.IImageOverlayMetadata);
         }
         if (this.shouldBeVisibleInitially(layerMetadata)) {
             this.map.addLayer(this.layerReferences[layerMetadata.id]);
@@ -61,6 +63,11 @@ export class DeclarativeLayers {
         const tileLayer: leafletTypes.TileLayer =
             new this.suppliedLeafletReference.TileLayer(layerMetadata.url, layerMetadata.options);
         this.addLayerToReferences( layerMetadata.id,  tileLayer);
+    }
+    private initializeImageOverlayLayer = (layerMetadata: dataTypes.IImageOverlayMetadata) => {
+        const imageOverlay: leafletTypes.ImageOverlay =
+        new this.suppliedLeafletReference.ImageOverlay(layerMetadata.url, layerMetadata.bounds, layerMetadata.options);
+        this.addLayerToReferences (layerMetadata.id, imageOverlay);
     }
     private initializeGeoJsonLayer = (layerMetadata: dataTypes.IGeoJsonMetadata) => {
         const options: leafletTypes.GeoJSONOptions = layerMetadata.options ? layerMetadata.options : {};
