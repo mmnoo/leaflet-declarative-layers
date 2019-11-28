@@ -64,6 +64,14 @@ const layers: dataTypes.ILayersMetadata = [{
     generateFeaturePopupContent: (feature) => {
         return feature.properties.popupContent;
     },
+},
+{
+    id: 'testImageOverlay1',
+    label: 'testImageOverlay1',
+    visibleInitially: true,
+    url: 'url',
+    bounds: [[40.712216, -74.22655], [40.773941, -74.12544]],
+    options: {attribution: 'I\'m a test image overlay!'}
 }];
 let map: leaflet.Map;
 let MockMap: Mock<leaflet.Map>;
@@ -103,6 +111,7 @@ describe('declarative layers', () => {
            expect(declarativeLayers.getLayerReferences().testTileLayer1).toBeDefined();
            expect(declarativeLayers.getLayerReferences().testTileLayer2).toBeDefined();
            expect(declarativeLayers.getLayerReferences().testGeoJsonLayer1).toBeDefined();
+           expect(declarativeLayers.getLayerReferences().testImageOverlay1).toBeDefined();
         });
     });
     describe('adding layers initially', () => {
@@ -122,15 +131,25 @@ describe('declarative layers', () => {
             it('should load GeoJson Layers', () => {
                 expect(map.addLayer).toHaveBeenCalledWith(declarativeLayers.getLayerReferences().testGeoJsonLayer1);
             });
-        });
-        describe('popups', () => {
-            const geoJsonMetadataWithPopup = layers[2] as dataTypes.IGeoJsonMetadata;
-            it('should bind popups to a layer', () => {
-                expect(geoJsonLayer.bindPopup)
-                .toHaveBeenCalledWith(geojsonFeatureCollection.features[0].properties.popupContent);
+            // TODO add test for options
+            describe('popups', () => {
+                const geoJsonMetadataWithPopup = layers[2] as dataTypes.IGeoJsonMetadata;
+                it('should bind popups to a layer', () => {
+                    expect(geoJsonLayer.bindPopup)
+                    .toHaveBeenCalledWith(geojsonFeatureCollection.features[0].properties.popupContent);
+                });
+                it('shouldnt interfere with other options using onEachFeature', () => {
+                   expect(testingOnEach).toEqual(2);
+                });
             });
-            it('shouldnt interfere with other options using onEachFeature', () => {
-               expect(testingOnEach).toEqual(2);
+        });
+        describe('ImageOverlay Layers', () => {
+            it ('should load image overlays', () => {
+                expect(map.addLayer).toHaveBeenCalledWith(declarativeLayers.getLayerReferences().testImageOverlay1);
+            });
+            it ('should pass image overlay options to Leaflet', () => {
+                expect(declarativeLayers.getLayerReferences().testImageOverlay1.options.attribution)
+                .toEqual(layers[3].options.attribution);
             });
         });
     });
@@ -139,6 +158,7 @@ describe('declarative layers', () => {
         let newGeoJsonMetadataInvisible: dataTypes.ILayerMetadata;
         let newTileLayerVisible: dataTypes.ILayerMetadata;
         let newTileLayerInvisible: dataTypes.ILayerMetadata;
+        let newImageOverlay: dataTypes.ILayerMetadata;
         const newGeojsonFeatureVisible: geoJsonFeature = {
             type: 'Feature',
             properties: {},
@@ -187,10 +207,19 @@ describe('declarative layers', () => {
                 visibleInitially: false,
                 options: { maxZoom: 3},
             };
+            newImageOverlay = {
+                id: 'testNewImageOverlay1',
+                label: 'testNewImageOverlay1',
+                visibleInitially: true,
+                url: 'url',
+                bounds: [[40.712216, -74.22655], [40.773941, -74.12544]],
+                options: {attribution: 'I\'m a test image overlay!'},
+            };
             testAddLayerReference = declarativeLayers.addLayer(newGeoJsonMetadataVisible);
             declarativeLayers.addLayer(newGeoJsonMetadataInvisible);
             declarativeLayers.addLayer(newTileLayerVisible);
             declarativeLayers.addLayer(newTileLayerInvisible);
+            declarativeLayers.addLayer(newImageOverlay);
             layerReferences = declarativeLayers.getLayerReferences();
         });
         describe('adding layers to the map and references post inititialization', () => {
@@ -199,16 +228,18 @@ describe('declarative layers', () => {
                 expect(layerReferences.testNewGeoJsonLayerInvisible).toBeDefined();
                 expect(layerReferences.testNewTileLayerVisible).toBeDefined();
                 expect(layerReferences.testNewTileLayerInvisible).toBeDefined();
+                expect(layerReferences.testNewImageOverlay1).toBeDefined();
             });
             it('should add the new visible layers to the existing layers on the map', () => {
                 expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
                 expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewTileLayerVisible);
+                expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewImageOverlay1);
             });
             it('should NOT add a new layer with a false visible property to the map', () => {
                 expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerInvisible);
                 expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewTileLayerInvisible);
             });
-            it('should return a reference to the added layer', () => {
+            it('the addLayer function should return a reference to the added layer', () => {
                 expect(_.isEqual(testAddLayerReference, layerReferences.testNewGeoJsonLayerVisible)).toBeTruthy();
             });
             describe('including layer options', () => {
@@ -221,6 +252,11 @@ describe('declarative layers', () => {
                 it('should pass on GeoJSON options to the Leaflet layer', () => {
                     expect(layerReferences.testNewGeoJsonLayerVisible.options.attribution)
                     .toEqual(newGeoJsonMetadataVisible.options.attribution);
+                });
+                // TODO explicit test for info win not conflicting with options
+                it ('should pass image overlay options to Leaflet', () => {
+                    expect(declarativeLayers.getLayerReferences().testImageOverlay1.options.attribution)
+                    .toEqual(layers[3].options.attribution);
                 });
             });
         });

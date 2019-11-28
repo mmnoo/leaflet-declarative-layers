@@ -48,8 +48,14 @@
           generateFeaturePopupContent: (feature) => {
             return feature.properties.popupContent;
           },
-
-        }
+        },
+        {
+          id: 'testImageOverlay1',
+          label: 'testImageOverlay1',
+          visibleInitially: true,
+          url: 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
+          bounds: [[49.8, -115.1], [49.0, -113.5]] // made up coordinates, you will need to use coordinates that correspond to the image you are using
+        },
       ];
       const map = new L.Map('map', { zoom: 8, center: new L.LatLng(49.5, -115)});
       const basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
