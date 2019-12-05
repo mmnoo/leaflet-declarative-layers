@@ -28,22 +28,22 @@
   "homepage": "https://github.com/mmnoo/leaflet-declarative-layers#readme",
   "devDependencies": {
     "@types/geojson": "^7946.0.7",
-    "@types/jasmine": "^3.3.13",
-    "@types/leaflet": "^1.5.5",
-    "jasmine": "^3.4.0",
-    "jasmine-core": "^3.4.0",
-    "karma": "^3.1.4",
+    "@types/jasmine": "^3.5.0",
+    "@types/leaflet": "^1.5.6",
+    "jasmine": "^3.5.0",
+    "jasmine-core": "^3.5.0",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^2.0.0",
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^4.1.1",
     "lodash": "^4.17.15",
-    "ts-loader": "^6.0.4",
-    "ts-mocks": "^2.3.4",
-    "tslint": "^5.18.0",
-    "typescript": "^3.7.2",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5"
+    "ts-loader": "^6.2.1",
+    "ts-mocks": "^2.6.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "peerDependencies": {
     "leaflet": "^1.5.1"
