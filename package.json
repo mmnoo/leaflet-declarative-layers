@@ -10,9 +10,11 @@
     "bundle-dev": "npm run clean && webpack --mode=development",
     "test": "karma start",
     "build": "npm run lint && npm run test && npm run bundle",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
-  "files": ["/dist"],
+  "files": [
+    "/dist"
+  ],
   "browser": "/dist/leafletDeclarativeLayers.js",
   "repository": {
     "type": "git",
@@ -45,5 +47,8 @@
   },
   "peerDependencies": {
     "leaflet": "^1.5.1"
+  },
+  "dependencies": {
+    "leaflet": "^1.6.0"
   }
 }
