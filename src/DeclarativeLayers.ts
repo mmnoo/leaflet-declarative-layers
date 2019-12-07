@@ -75,7 +75,7 @@ export class DeclarativeLayers {
     private initializeGeoJsonLayer = (layerMetadata: dataTypes.IGeoJsonMetadata) => {
         const options: leafletTypes.GeoJSONOptions = layerMetadata.options ? layerMetadata.options : {};
         const onEachFeatureOptions: leafletTypes.GeoJSONOptions = {
-            onEachFeature: (feature: geoJson.Feature, layer: leafletTypes.Layer): void => {
+            onEachFeature: (feature: geoJson.Feature, layer: leafletTypes.GeoJSON): void => {
                 if (options.onEachFeature) {
                     options.onEachFeature(feature, layer);
                 }
