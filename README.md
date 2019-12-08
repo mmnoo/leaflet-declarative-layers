@@ -3,12 +3,14 @@ A Leaflet plugin to make adding map layers easier. Users just need to describe t
 <div class="panel panel-warning">
 **Warning**
 {: .panel-heading}
-<div class="panel-body">
+    <div class="panel-body">
 
-This documentation is also a work-in-progress. The intention is to keep it current, but its likely already out of date. Please submit an issue or pull request if you notice any needed improvements! 
+    This documentation is also a work-in-progress. The intention is to keep it current, but its likely already out of date. Please submit an issue or pull request if you notice any needed improvements! 
 
+    </div>
 </div>
-</div>
+
+![](https://github.com/mmnoo/leaflet-declarative-layers/blob/master/.github/workflows/nodejs.yml/badge.svg)
 
 ## Project setup
 
