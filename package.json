@@ -9,8 +9,9 @@
     "bundle": "npm run clean && webpack --mode=production",
     "bundle-dev": "npm run clean && webpack --mode=development",
     "test": "karma start",
-    "build": "npm run lint && npm run test && npm run e2e, npm run bundle",
+    "build": "npm run lint && npm run test && npm run background_e2e && npm run bundle",
     "prepublishOnly": "npm run build",
+    "background_e2e": "cypress run",
     "e2e": "cypress open"
   },
   "files": [
