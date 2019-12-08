@@ -1,12 +1,12 @@
 import { Mock } from 'ts-mocks';
 import * as leaflet from 'leaflet';
-import * as dataTypes from '../src/dataTypes';
-import { DeclarativeLayers, ILayerReference } from '../src/DeclarativeLayers';
+import * as dataTypes from '../../src/dataTypes';
+import { DeclarativeLayers, ILayerReference } from '../../src/DeclarativeLayers';
 import {_} from 'lodash';
 import {
     FeatureCollection as geoJsonFeatureCollection,
     Feature as geoJsonFeature,
-} from '../node_modules/@types/geojson/index';
+} from '../../node_modules/@types/geojson/index';
 let testingOnEach: number;
 const fakeFeatureClick = (e: leaflet.LeafletEvent) => {
     map.flyTo(new leaflet.LatLng(-104.98999178409576, 39.74683938093904));
