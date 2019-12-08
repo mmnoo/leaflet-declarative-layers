@@ -4,7 +4,7 @@ import * as geojson from '../node_modules/@types/geojson/index';
 
 export interface IBasicMetadata {
     label: string;
-    visibleInitially: boolean;
+    visibleInitially?: boolean;
     id: string;
     legend?: string; // path to legend image
 }

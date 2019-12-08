@@ -56,7 +56,6 @@ const layers: dataTypes.ILayersMetadata = [{
 {
     id: 'testGeoJsonLayer1',
     label: 'testGeoJsonLayer1',
-    visibleInitially: true,
     data: geojsonFeatureCollection,
     options: {onEachFeature: (feature, layer) => {
         testingOnEach += 1;
@@ -78,7 +77,7 @@ let MockMap: Mock<leaflet.Map>;
 let declarativeLayers: DeclarativeLayers;
 let testTileLayer1: leaflet.TileLayer;
 let testTileLayer2: leaflet.TileLayer;
-let geoJsonLayer: leaflet.GeoJSON;
+let testGeoJsonLayer1: leaflet.GeoJSON;
 
 const initializateDeclarativeLayers = () => {
     MockMap = new Mock<leaflet.Map>({
@@ -90,7 +89,7 @@ const initializateDeclarativeLayers = () => {
     declarativeLayers = new DeclarativeLayers(leaflet, map, layers);
     testTileLayer1 = declarativeLayers.getLayerReferences().testTileLayer1 as leaflet.TileLayer;
     testTileLayer2 = declarativeLayers.getLayerReferences().testTileLayer2 as leaflet.TileLayer;
-    geoJsonLayer = declarativeLayers.getLayerReferences().testGeoJsonLayer1 as leaflet.GeoJSON;
+    testGeoJsonLayer1 = declarativeLayers.getLayerReferences().testGeoJsonLayer1 as leaflet.GeoJSON;
 };
 describe('declarative layers', () => {
     beforeEach((done) => {
@@ -100,9 +99,16 @@ describe('declarative layers', () => {
         done();
     });
     describe('initialization', () => {
-        it('adds only visible layers to the map', () => {
-            const visibleItems = layers.filter((layerItem) => layerItem.visibleInitially);
-            expect(map.addLayer).toHaveBeenCalledTimes(visibleItems.length);
+        describe('visibleInitially property', () => {
+            it('adds visibleIntially=true to the map', () => {
+                expect(map.addLayer).toHaveBeenCalledWith(testTileLayer1);
+            });
+            it('doesnt add visibleIntially=false to the map', () => {
+                expect(map.addLayer).not.toHaveBeenCalledWith(testTileLayer2);
+            });
+            it('adds layers with no visibleInitially property set to the map by default', () => {
+                expect(map.addLayer).toHaveBeenCalledWith(testGeoJsonLayer1);
+            });
         });
     });
     describe('access to layers refrences', () => {
@@ -135,7 +141,7 @@ describe('declarative layers', () => {
             describe('popups', () => {
                 const geoJsonMetadataWithPopup = layers[2] as dataTypes.IGeoJsonMetadata;
                 it('should bind popups to a layer', () => {
-                    expect(geoJsonLayer.bindPopup)
+                    expect(testGeoJsonLayer1.bindPopup)
                     .toHaveBeenCalledWith(geojsonFeatureCollection.features[0].properties.popupContent);
                 });
                 it('shouldnt interfere with other options using onEachFeature', () => {
@@ -181,7 +187,6 @@ describe('declarative layers', () => {
             newGeoJsonMetadataVisible = {
                 id: 'testNewGeoJsonLayerVisible',
                 label: 'testNewGeoJsonLayerVisible',
-                visibleInitially: true,
                 data: newGeojsonFeatureVisible,
                 options: { attribution: 'fjdskl' },
             };
@@ -230,10 +235,12 @@ describe('declarative layers', () => {
                 expect(layerReferences.testNewTileLayerInvisible).toBeDefined();
                 expect(layerReferences.testNewImageOverlay1).toBeDefined();
             });
-            it('should add the new visible layers to the existing layers on the map', () => {
-                expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
+            it('should add the new visibleInitially=true layers to the existing layers on the map', () => {
                 expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewTileLayerVisible);
                 expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewImageOverlay1);
+            });
+            it('should add undefined visibleInitially layers to the existing layers on the map', () => {
+                expect(map.addLayer).toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerVisible);
             });
             it('should NOT add a new layer with a false visible property to the map', () => {
                 expect(map.addLayer).not.toHaveBeenCalledWith(layerReferences.testNewGeoJsonLayerInvisible);

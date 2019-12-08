@@ -2,6 +2,7 @@ import * as dataTypes from './dataTypes';
 // TODO karma complains if import from 'geoJson'. Figure out more elegant solution.
 import * as geoJson from '../node_modules/@types/geojson/index';
 import * as leafletTypes from '../node_modules/@types/leaflet/index';
+import {defaultToTrue} from './utilities';
 
 export interface ILayerReference {
     [state: string]: dataTypes.ILeafletLayer;
@@ -63,7 +64,7 @@ export class DeclarativeLayers {
     }
     private shouldBeVisibleInitially = (layerMetadata: dataTypes.ILayerMetadata): boolean => {
         // if tagged as visible AND initialized
-       return layerMetadata.visibleInitially && !!this.layerReferences[layerMetadata.id];
+       return defaultToTrue(layerMetadata.visibleInitially) && !!this.layerReferences[layerMetadata.id];
     }
     private initializeTileLayer = (layerMetadata: dataTypes.ITilesMetadata) => {
         return new this.suppliedLeafletReference.TileLayer(layerMetadata.url, layerMetadata.options);

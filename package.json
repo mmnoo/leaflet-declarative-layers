@@ -9,10 +9,10 @@
     "bundle": "npm run clean && webpack --mode=production",
     "bundle-dev": "npm run clean && webpack --mode=development",
     "test": "karma start",
-    "build": "npm run lint && npm run test && npm run background_e2e && npm run bundle",
+    "build": "npm run lint && npm run test && npm run background-e2e",
     "prepublishOnly": "npm run build",
-    "background_e2e": "cypress run",
-    "e2e": "cypress open"
+    "background-e2e": " npm run bundle && cypress run",
+    "e2e": "npm run bundle && cypress open"
   },
   "files": [
     "/dist"
@@ -36,7 +36,7 @@
     "jasmine": "^3.5.0",
     "jasmine-core": "^3.5.0",
     "karma": "^4.4.1",
-    "karma-chrome-launcher": "^2.2.0",
+    "karma-chrome-launcher": "^3.1.0",
     "karma-cli": "^2.0.0",
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^4.1.1",
@@ -49,7 +49,7 @@
     "webpack-cli": "^3.3.10"
   },
   "peerDependencies": {
-    "leaflet": "^1.5.1"
+    "leaflet": "^1.6.0"
   },
   "dependencies": {
     "leaflet": "^1.6.0"
