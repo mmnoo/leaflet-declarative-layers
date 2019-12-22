@@ -36,7 +36,10 @@ describe('adding layers after initializing LDL', () => {
             it('opens a popup', () => {
                 cy.get('.leaflet-popup-content').should('not.exist');
                 cy.get('#addGeoJson').click();
-                cy.get('.test-geojson-icon').click({multiple: true});
+                cy.get('.test-geojson-icon').click({
+                    multiple: true,
+                    force: true, // without this, it passes on linux but fails on mac
+                });
                 cy.get('.leaflet-popup-content');
             });
         })
