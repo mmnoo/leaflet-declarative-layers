@@ -14,7 +14,10 @@ A Leaflet plugin to make adding map layers easier. Users just need to describe t
 
 ## Project setup
 
-```npm install```
+```
+npm install leaflet
+npm install
+```
 
 ### Lint, test, bundle (minification is a to do item still)
 
