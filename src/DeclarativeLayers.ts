@@ -2,7 +2,7 @@ import * as dataTypes from './dataTypes';
 // TODO karma complains if import from 'geoJson'. Figure out more elegant solution.
 import * as geoJson from '../node_modules/@types/geojson/index';
 import * as leafletTypes from '../node_modules/@types/leaflet/index';
-import {defaultToTrue} from './utilities';
+import {defaultBooleanToTrue} from './utilities';
 
 export interface ILayerReference {
     [state: string]: dataTypes.ILeafletLayer;
@@ -21,9 +21,6 @@ export class DeclarativeLayers {
             private map: leafletTypes.Map,
             layersMetadata?: dataTypes.ILayersMetadata,
         ) {
-        this.map = map;
-        this.suppliedLeafletReference = suppliedLeafletReference;
-
         if (layersMetadata) {
             layersMetadata.forEach((layerMetadata) => {
                 this.initializeLayer(layerMetadata);
@@ -62,9 +59,9 @@ export class DeclarativeLayers {
     private addLayerToReferences = (id: string, layer: dataTypes.ILeafletLayer) => {
       this.layerReferences[id] = layer;
     }
-    private shouldBeVisibleInitially = (layerMetadata: dataTypes.ILayerMetadata): boolean => {
+    private shouldBeVisibleInitially = ({visibleInitially, id}: dataTypes.ILayerMetadata): boolean => {
         // if tagged as visible AND initialized
-       return defaultToTrue(layerMetadata.visibleInitially) && !!this.layerReferences[layerMetadata.id];
+       return defaultBooleanToTrue(visibleInitially) && !!this.layerReferences[id];
     }
     private initializeTileLayer = (layerMetadata: dataTypes.ITilesMetadata) => {
         return new this.suppliedLeafletReference.TileLayer(layerMetadata.url, layerMetadata.options);
