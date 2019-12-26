@@ -40,6 +40,7 @@ declare const require: any;
         getLayerReferences: () => declarativeLayersInstance.getLayerReferences(),
         addLayer: (layerMetadata: ILayerMetadata) => declarativeLayersInstance.addLayer(layerMetadata),
         removeLayer: (layer: ILeafletLayer) => declarativeLayersInstance.removeLayer(layer),
+        toggleLayer: (layer: ILeafletLayer) => declarativeLayersInstance.toggleLayer(layer),
     };
     return leafletDeclarativeLayersPlugin;
 }, window));

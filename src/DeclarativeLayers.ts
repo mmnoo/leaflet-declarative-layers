@@ -30,13 +30,19 @@ export class DeclarativeLayers {
     public getLayerReferences = () => {
         return this.layerReferences;
     }
-
     public addLayer = (layerMetadata: dataTypes.ILayerMetadata): dataTypes.ILeafletLayer => {
         this.initializeLayer(layerMetadata);
         return this.layerReferences[layerMetadata.id];
     }
     public removeLayer = (layer: dataTypes.ILeafletLayer): void => {
         this.map.removeLayer(layer);
+    }
+    public toggleLayer = (layer: dataTypes.ILeafletLayer): void => {
+        if (this.map.hasLayer(layer)) {
+            this.removeLayer(layer);
+        } else {
+            this.map.addLayer(layer);
+        }
     }
     private initializeLayer = (layerMetadata: dataTypes.ILayerMetadata): void => {
         const layer: dataTypes.ILeafletLayer = this.createLeafletLayer(layerMetadata);
