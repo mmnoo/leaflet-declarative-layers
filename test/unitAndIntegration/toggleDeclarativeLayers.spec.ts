@@ -1,34 +1,34 @@
-import { Mock } from "ts-mocks";
-import * as leaflet from "leaflet";
-import * as dataTypes from "../../src/dataTypes";
+import { Mock } from 'ts-mocks';
+import * as leaflet from 'leaflet';
+import * as dataTypes from '../../src/dataTypes';
 import {
   DeclarativeLayers,
   ILayerReference,
-} from "../../src/DeclarativeLayers";
+} from '../../src/DeclarativeLayers';
 import {
   FeatureCollection as geoJsonFeatureCollection,
   Feature as geoJsonFeature,
-} from "../../node_modules/@types/geojson/index";
+} from '../../node_modules/@types/geojson/index';
 const geojsonFeatureCollection: geoJsonFeatureCollection = {
-  type: "FeatureCollection",
+  type: 'FeatureCollection',
   features: [
     {
-      type: "Feature",
+      type: 'Feature',
       properties: {
-        popupContent: "18th & California Light Rail Stop",
+        popupContent: '18th & California Light Rail Stop',
       },
       geometry: {
-        type: "Point",
+        type: 'Point',
         coordinates: [-104.98999178409576, 39.74683938093904],
       },
     },
     {
-      type: "Feature",
+      type: 'Feature',
       properties: {
-        popupContent: "20th & Welton Light Rail Stop",
+        popupContent: '20th & Welton Light Rail Stop',
       },
       geometry: {
-        type: "Point",
+        type: 'Point',
         coordinates: [-104.98689115047453, 39.747924136466565],
       },
     },
@@ -36,22 +36,22 @@ const geojsonFeatureCollection: geoJsonFeatureCollection = {
 };
 const layers: dataTypes.ILayersMetadata = [
   {
-    id: "testTileLayer1",
-    label: "testTileLayer1",
-    url: "www.testTileLayer1url.com",
+    id: 'testTileLayer1',
+    label: 'testTileLayer1',
+    url: 'www.testTileLayer1url.com',
     visibleInitially: false,
   },
   {
-    id: "testGeoJsonLayer1",
-    label: "testGeoJsonLayer1",
+    id: 'testGeoJsonLayer1',
+    label: 'testGeoJsonLayer1',
     data: geojsonFeatureCollection,
     visibleInitially: false,
   },
   {
-    id: "testImageOverlay1",
-    label: "testImageOverlay1",
+    id: 'testImageOverlay1',
+    label: 'testImageOverlay1',
     visibleInitially: false,
-    url: "url",
+    url: 'url',
     bounds: [
       [40.712216, -74.22655],
       [40.773941, -74.12544],
@@ -75,7 +75,7 @@ const initializateDeclarativeLayers = () => {
   testImageOverlay = declarativeLayers.getLayerReferences()
     .testImageOverlay1 as leaflet.ImageOverlay;
 };
-describe("toggling layers on and off with toggleLayer function", () => {
+describe('toggling layers on and off with toggleLayer function', () => {
   let layersForToggling: dataTypes.ILeafletLayer[];
   beforeEach(() => {
     initializateDeclarativeLayers();

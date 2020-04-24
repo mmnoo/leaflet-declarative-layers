@@ -1,85 +1,100 @@
-<!doctype html>
-  <html>
-   <head>
-     <title>DEMO - Leaflet Dynamic Layers</title>
-     <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css">
-     <style>
-      .test-geojson-icon{
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DEMO - Leaflet Dynamic Layers</title>
+    <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
+    <style>
+      .test-geojson-icon {
         height: 10px;
         width: 10px;
         border: solid thick magenta;
       }
-     </style>
-   </head>
-   <body>
-     <div id="map" style="height: 400px; width: 400px; border: solid thin gray;"></div>
+    </style>
+  </head>
+  <body>
+    <div
+      id="map"
+      style="height: 400px; width: 400px; border: solid thin gray;"
+    ></div>
     <script src="../node_modules/leaflet/dist/leaflet-src.js"></script>
     <script src="../dist/leafletDeclarativeLayers.js"></script>
     <script>
       // this seems tobe the best I can do for getting a parent path when using a file:// protocol
-      const parentHref = (window.location.href).replace('initialize.html', '')
+      const parentHref = window.location.href.replace('initialize.html', '')
       // a selector for e2e tests to test GeoJson
-      const testGeoJsonIcon = L.divIcon({className: 'test-geojson-icon'});
+      const testGeoJsonIcon = L.divIcon({ className: 'test-geojson-icon' })
       const geojsonFeatureCollection = {
         type: 'FeatureCollection',
         features: [
-            {
-                type: 'Feature',
-                properties: {
-                    popupContent: '18th & California Light Rail Stop'
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: [-115, 49.5]
-                },
-            }, {
-                type: 'Feature',
-                properties: {
-                    popupContent: '20th & Welton Light Rail Stop'
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: [-115.1, 49.51]
-                },
+          {
+            type: 'Feature',
+            properties: {
+              popupContent: '18th & California Light Rail Stop',
             },
+            geometry: {
+              type: 'Point',
+              coordinates: [-115, 49.5],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {
+              popupContent: '20th & Welton Light Rail Stop',
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [-115.1, 49.51],
+            },
+          },
         ],
-      };
+      }
       const layerMetadata = [
         {
           id: 'tileLayer',
           label: 'Tile Layer Example',
-          url: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
-          options: { className: 'test-tile-layer'}, // added class name for e2e tests
-        }, 
+          url:
+            'https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
+          options: { className: 'test-tile-layer' }, // added class name for e2e tests
+        },
         {
           id: 'geoJsonLayer',
           label: 'GeoJSON Layer Example',
           data: geojsonFeatureCollection,
           visibleInitially: true,
-          generateFeaturePopupContent: (feature) => {
-            return feature.properties.popupContent;
+          generateFeaturePopupContent: feature => {
+            return feature.properties.popupContent
           },
           options: {
-            pointToLayer: (geoJsonPoint, latlng) => L.marker(latlng, {icon: testGeoJsonIcon}) // needed icon to add class name to for e2e tests
-          }
+            pointToLayer: (geoJsonPoint, latlng) =>
+              L.marker(latlng, { icon: testGeoJsonIcon }), // needed icon to add class name to for e2e tests
+          },
         },
         {
           id: 'testImageOverlay1',
           label: 'testImageOverlay1',
           visibleInitially: true,
           url: `${parentHref}/assets/newark_nj_1922.jpg`,
-          bounds: [[49.8, -115.1], [49.0, -113.5]], // made up coordinates, you will need to use coordinates that correspond to the image you are using
+          bounds: [
+            [49.8, -115.1],
+            [49.0, -113.5],
+          ], // made up coordinates, you will need to use coordinates that correspond to the image you are using
           options: { className: 'test-image-overlay' }, // added class name for e2e tests
         },
-      ];
-      const map = new L.Map('map', { zoom: 8, center: new L.LatLng(49.5, -115)});
-      const basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
-      map.addLayer(basemap);   
-      
-      const declaredLayers = new L.DeclarativeLayers(map, layerMetadata);
-      
-      // optional access to layer references 
-      console.log('Layer references: ', declaredLayers.getLayerReferences());
+      ]
+      const map = new L.Map('map', {
+        zoom: 8,
+        center: new L.LatLng(49.5, -115),
+      })
+      const basemap = new L.TileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { minZoom: 8, maxZoom: 12 },
+      )
+      map.addLayer(basemap)
+
+      const declaredLayers = new L.DeclarativeLayers(map, layerMetadata)
+
+      // optional access to layer references
+      console.log('Layer references: ', declaredLayers.getLayerReferences())
     </script>
-   </body>
-  </html>
+  </body>
+</html>
