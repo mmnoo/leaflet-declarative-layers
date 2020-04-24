@@ -1,70 +1,90 @@
-<!doctype html>
-  <html>
-   <head>
-     <title>DEMO - Leaflet Dynamic Layers</title>
-     <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css">
-     <style>
-        .test-geojson-icon{
-          height: 10px;
-          width: 10px;
-          border: solid thick orangered;
-        }
-       </style>
-   </head>
-   <body>
-     <div id="map" style="height: 400px; width: 400px; border: solid thin gray;"></div>
-     <button id="addVisibleTile">Add visible=true Layer (Stamen Tiles - Terrain)</button> Click adds layer to map, and to layers references.
-     <br/>
-     <button id="addGeoJson">Add GeoJSON layer</button> Click adds layer to map, and to layers references.
-     <br/>
-     <button id="addImageOverlay">Add Image Overlay layer</button> Click adds layer to map, and to layers references.
-      <br/>
-     <button id="addInvisibleTile">Add visible=false Layer (Stamen Tiles - Toner Lite)</button> Click adds layer to layers references only.
-     <br/>
-     <button id="removeVisibleTile">Remove visible=true Layer From Map (Stamen Tiles - Terrain)</button> Click removes layer from map. Reference to layer still available.
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DEMO - Leaflet Dynamic Layers</title>
+    <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
+    <style>
+      .test-geojson-icon {
+        height: 10px;
+        width: 10px;
+        border: solid thick orangered;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="map"
+      style="height: 400px; width: 400px; border: solid thin gray;"
+    ></div>
+    <button id="addVisibleTile">
+      Add visible=true Layer (Stamen Tiles - Terrain)
+    </button>
+    Click adds layer to map, and to layers references.
+    <br />
+    <button id="addGeoJson">Add GeoJSON layer</button> Click adds layer to map,
+    and to layers references.
+    <br />
+    <button id="addImageOverlay">Add Image Overlay layer</button> Click adds
+    layer to map, and to layers references.
+    <br />
+    <button id="addInvisibleTile">
+      Add visible=false Layer (Stamen Tiles - Toner Lite)
+    </button>
+    Click adds layer to layers references only.
+    <br />
+    <button id="removeVisibleTile">
+      Remove visible=true Layer From Map (Stamen Tiles - Terrain)
+    </button>
+    Click removes layer from map. Reference to layer still available.
     <script src="../node_modules/leaflet/dist/leaflet-src.js"></script>
     <script src="../dist/leafletDeclarativeLayers.js"></script>
     <script>
       // this seems tobe the best I can do for getting a parent path when using a file:// protocol
-      const parentHref = (window.location.href).replace('addRemoveDataAfterInitialization.html', '')
+      const parentHref = window.location.href.replace(
+        'addRemoveDataAfterInitialization.html',
+        '',
+      )
       // a selector for e2e tests to test GeoJson
-      const testGeoJsonIcon = L.divIcon({className: 'test-geojson-icon'}); 
+      const testGeoJsonIcon = L.divIcon({ className: 'test-geojson-icon' })
       const geojsonFeatureCollection = {
         type: 'FeatureCollection',
         features: [
-            {
-                type: 'Feature',
-                properties: {
-                    popupContent: '18th & California Light Rail Stop'
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: [-115, 49.5]
-                },
-            }, {
-                type: 'Feature',
-                properties: {
-                    popupContent: '20th & Welton Light Rail Stop'
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: [-115.1, 49.51]
-                },
+          {
+            type: 'Feature',
+            properties: {
+              popupContent: '18th & California Light Rail Stop',
             },
+            geometry: {
+              type: 'Point',
+              coordinates: [-115, 49.5],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {
+              popupContent: '20th & Welton Light Rail Stop',
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [-115.1, 49.51],
+            },
+          },
         ],
-      };
+      }
       const layerMetadata = [
         {
           id: 'toner-lite',
           label: 'Tile Layer Example',
-          url: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
+          url:
+            'https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
           visibleInitially: false,
-          options: { className: 'test-invisible-tile-layer'}, // added class name for e2e tests
-        }, {
+          options: { className: 'test-invisible-tile-layer' }, // added class name for e2e tests
+        },
+        {
           id: 'terrain',
           label: 'Tile Layer Example',
           url: 'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
-          options: { className: 'test-visible-tile-layer'}, // added class name for e2e tests
+          options: { className: 'test-visible-tile-layer' }, // added class name for e2e tests
         },
         {
           id: 'geoJsonLayer',
@@ -72,10 +92,11 @@
           data: geojsonFeatureCollection,
           visibleInitially: true,
           options: {
-            pointToLayer: (geoJsonPoint, latlng) => L.marker(latlng, {icon: testGeoJsonIcon}) // needed icon to add class name to for e2e tests
+            pointToLayer: (geoJsonPoint, latlng) =>
+              L.marker(latlng, { icon: testGeoJsonIcon }), // needed icon to add class name to for e2e tests
           },
-          generateFeaturePopupContent: (feature) => {
-            return feature.properties.popupContent;
+          generateFeaturePopupContent: feature => {
+            return feature.properties.popupContent
           },
         },
         {
@@ -83,41 +104,60 @@
           label: 'testImageOverlay1',
           visibleInitially: true,
           url: `${parentHref}/assets/newark_nj_1922.jpg`,
-          bounds: [[49.8, -115.1], [49.0, -113.5]], // made up coordinates, you will need to use coordinates that correspond to the image you are using
+          bounds: [
+            [49.8, -115.1],
+            [49.0, -113.5],
+          ], // made up coordinates, you will need to use coordinates that correspond to the image you are using
           options: { className: 'test-image-overlay' },
-        }
-      ];
-      const map = new L.Map('map', { zoom: 8, center: new L.LatLng(49.5, -115)});
-      const basemap = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 12});		
-      map.addLayer(basemap);   
-      
-      const declaredLayers = new L.DeclarativeLayers(map);; 
+        },
+      ]
+      const map = new L.Map('map', {
+        zoom: 8,
+        center: new L.LatLng(49.5, -115),
+      })
+      const basemap = new L.TileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { minZoom: 8, maxZoom: 12 },
+      )
+      map.addLayer(basemap)
+
+      const declaredLayers = new L.DeclarativeLayers(map)
 
       //add a visible layer
-      document.getElementById('addVisibleTile').addEventListener('click', () => {
-        declaredLayers.addLayer(layerMetadata[1]);
-        console.log('Layer references: ', declaredLayers.getLayerReferences());
-      });
+      document
+        .getElementById('addVisibleTile')
+        .addEventListener('click', () => {
+          declaredLayers.addLayer(layerMetadata[1])
+          console.log('Layer references: ', declaredLayers.getLayerReferences())
+        })
       document.getElementById('addGeoJson').addEventListener('click', () => {
-        declaredLayers.addLayer(layerMetadata[2]);
-        console.log('Layer references: ', declaredLayers.getLayerReferences());
-      });
-      document.getElementById('addImageOverlay').addEventListener('click', () => {
-        declaredLayers.addLayer(layerMetadata[3]);
-        console.log('Layer references: ', declaredLayers.getLayerReferences());
-      });
+        declaredLayers.addLayer(layerMetadata[2])
+        console.log('Layer references: ', declaredLayers.getLayerReferences())
+      })
+      document
+        .getElementById('addImageOverlay')
+        .addEventListener('click', () => {
+          declaredLayers.addLayer(layerMetadata[3])
+          console.log('Layer references: ', declaredLayers.getLayerReferences())
+        })
 
       //add an invisible layer
-      document.getElementById('addInvisibleTile').addEventListener('click', () => {
-        declaredLayers.addLayer(layerMetadata[0]);
-        console.log('Layer references: ', declaredLayers.getLayerReferences());
-      });
+      document
+        .getElementById('addInvisibleTile')
+        .addEventListener('click', () => {
+          declaredLayers.addLayer(layerMetadata[0])
+          console.log('Layer references: ', declaredLayers.getLayerReferences())
+        })
 
       //remove a visible layer from the map
-      document.getElementById('removeVisibleTile').addEventListener('click', () => {
-        declaredLayers.removeLayer(declaredLayers.getLayerReferences().terrain);
-        console.log('Layer references: ', declaredLayers.getLayerReferences());
-      });
+      document
+        .getElementById('removeVisibleTile')
+        .addEventListener('click', () => {
+          declaredLayers.removeLayer(
+            declaredLayers.getLayerReferences().terrain,
+          )
+          console.log('Layer references: ', declaredLayers.getLayerReferences())
+        })
     </script>
-   </body>
-  </html>
+  </body>
+</html>

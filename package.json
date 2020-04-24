@@ -5,7 +5,7 @@
   "private": false,
   "scripts": {
     "clean": "rm -rf ./dist",
-    "lint": "tslint src/**/*.ts --format stylish",
+    "lint": "tslint src/**/*.ts test/**/*.ts",
     "bundle": "npm run clean && webpack --mode=production",
     "bundle-dev": "npm run clean && webpack --mode=development",
     "test": "karma start",
@@ -41,9 +41,11 @@
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^4.1.1",
     "lodash": "^4.17.15",
+    "prettier": "^2.0.5",
     "ts-loader": "^6.2.1",
     "ts-mocks": "^2.6.0",
     "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.3",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
